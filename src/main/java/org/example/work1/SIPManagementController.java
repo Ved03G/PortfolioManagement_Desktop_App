@@ -46,10 +46,6 @@ public class SIPManagementController {
         switchToPage(event, "TransactionHistory.fxml", "Transaction History");
     }
 
-    public void handlerealtimeupdatesclick(ActionEvent event) throws IOException {
-        switchToPage(event, "RealTimeUpdates.fxml", "Real-Time Updates");
-    }
-
     public void handleprofileclick(ActionEvent event) throws IOException {
         switchToPage(event, "UserProfile.fxml", "User Profile");
     }

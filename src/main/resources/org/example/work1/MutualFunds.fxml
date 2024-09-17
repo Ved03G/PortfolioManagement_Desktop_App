@@ -8,26 +8,24 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.MutualFundsController">
    <children>
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container" stylesheets="@style.css">
          <children>
-            <Button fx:id="btnPortfolio" layoutY="110.0" onAction="#handlePortfolioButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Portfolio Management" />
-            <Button fx:id="btnSIP" layoutY="160.0" onAction="#handlesipclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="SIP Management" />
-            <Button fx:id="btnMutualFunds" layoutY="210.0" onAction="#handlemutualfundclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Mutual Funds" />
-            <Button fx:id="btnReports" layoutY="260.0" onAction="#handlereportsclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Reports &amp; Analytics" />
-            <Button fx:id="btnTransactions" layoutY="310.0" onAction="#handletransactionclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Transaction History" />
-            <Button fx:id="btnRealTimeUpdates" layoutY="360.0" onAction="#handlerealtimeupdatesclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Real-Time Updates" />
-            <Button fx:id="btnProfile" layoutY="410.0" onAction="#handleprofileclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="User Profile" />
-            <Label layoutX="4.0" layoutY="57.0" prefHeight="53.0" prefWidth="194.0" styleClass="header-label" text=" Client Dashboard">
+            <Button fx:id="btnPortfolio" layoutY="119.0" onAction="#handlePortfolioButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Portfolio Management" />
+            <Button fx:id="btnSIP" layoutY="169.0" onAction="#handlesipclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="SIP Management" />
+            <Button fx:id="btnMutualFunds" layoutY="219.0" onAction="#handlemutualfundclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Mutual Funds" />
+            <Button fx:id="btnReports" layoutY="269.0" onAction="#handlereportsclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Reports &amp; Analytics" />
+            <Button fx:id="btnTransactions" layoutY="319.0" onAction="#handletransactionclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Transaction History" />
+            <Button fx:id="btnProfile" layoutY="369.0" onAction="#handleprofileclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="User Profile" />
+            <Label layoutX="4.0" layoutY="66.0" prefHeight="53.0" prefWidth="194.0" styleClass="header-label" text=" Client Dashboard">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <ImageView fitHeight="68.0" fitWidth="126.0" layoutX="37.0">
+            <ImageView fitHeight="50.0" fitWidth="196.0" layoutX="4.0" layoutY="14.0">
                <image>
-                  <Image url="@icons/8bb05390-3f6d-4e13-87d5-f00e9e0ec00b.jpg" />
+                  <Image url="@icons/INVESTMATE (3).png" />
                </image>
             </ImageView>
          </children>

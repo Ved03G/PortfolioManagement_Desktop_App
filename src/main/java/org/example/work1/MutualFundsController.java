@@ -23,7 +23,6 @@ public class MutualFundsController {
     public Button btnMutualFunds;
     public Button btnReports;
     public Button btnTransactions;
-    public Button btnRealTimeUpdates;
     public Button btnProfile;
 
     // Method to load the FXML of each section
@@ -43,7 +42,7 @@ public class MutualFundsController {
 
     // Reset all buttons to default style
     private void resetButtonStyles() {
-        List<Button> buttons = List.of(btnPortfolio, btnSIP, btnMutualFunds, btnReports, btnTransactions, btnRealTimeUpdates, btnProfile);
+        List<Button> buttons = List.of(btnPortfolio, btnSIP, btnMutualFunds, btnReports, btnTransactions, btnProfile);
         for (Button button : buttons) {
             button.getStyleClass().remove("sidebar-button-active");
         }
@@ -67,10 +66,6 @@ public class MutualFundsController {
 
     public void handletransactionclick(ActionEvent event) throws IOException {
         switchToPage(event, "TransactionHistory.fxml", "Transaction History", btnTransactions);
-    }
-
-    public void handlerealtimeupdatesclick(ActionEvent event) throws IOException {
-        switchToPage(event, "RealTimeUpdates.fxml", "Real-Time Updates", btnRealTimeUpdates);
     }
 
     public void handleprofileclick(ActionEvent event) throws IOException {
