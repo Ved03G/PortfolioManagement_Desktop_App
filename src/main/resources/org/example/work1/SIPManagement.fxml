@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.SIPManagementController">
    <children>
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container" stylesheets="@style.css">
@@ -28,6 +30,30 @@
                   <Image url="@icons/INVESTMATE (3).png" />
                </image>
             </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="200.0" prefHeight="600.0" prefWidth="700.0" styleClass="main-content-pane">
+         <children>
+            <Label layoutX="20.0" layoutY="14.0" text="SIP Management" styleClass="header-label"/>
+
+            <!-- Table to show Active SIPs -->
+            <TableView fx:id="sipTable" layoutX="20.0" layoutY="50.0" prefHeight="400.0" prefWidth="660.0">
+               <columns>
+                  <TableColumn fx:id="colSchemeName" text="Scheme Name" prefWidth="150.0"/>
+                  <TableColumn fx:id="colInstallmentAmount" text="Installment Amount" prefWidth="100.0"/>
+                  <TableColumn fx:id="colInstallments" text="Installments" prefWidth="80.0"/>
+                  <TableColumn fx:id="colNextInstallment" text="Next Installment Date" prefWidth="120.0"/>
+                  <TableColumn fx:id="colInvestmentAmount" text="Investment Amount" prefWidth="120.0"/>
+                  <TableColumn fx:id="colDuration" text="Duration" prefWidth="90.0"/>
+                  <TableColumn fx:id="colReturns" text="Returns" prefWidth="100.0"/>
+               </columns>
+            </TableView>
+
+            <!-- Action Buttons -->
+            <Button fx:id="btnAddSIP" layoutX="20.0" layoutY="470.0" text="Add SIP"/>
+            <Button fx:id="btnRemoveSIP" layoutX="120.0" layoutY="470.0" text="Remove SIP"/>
+            <Button fx:id="btnModifySIP" layoutX="220.0" layoutY="470.0" text="Modify SIP"/>
+            <Button fx:id="btnStartSIP" layoutX="320.0" layoutY="470.0" text="Start New SIP"/>
          </children>
       </Pane>
    </children>

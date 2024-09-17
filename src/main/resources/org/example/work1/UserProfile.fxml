@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextField?>
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.UserProfileController">
    <children>
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container" stylesheets="@style.css">
@@ -28,6 +29,41 @@
                   <Image url="@icons/INVESTMATE (3).png" />
                </image>
             </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="200.0" prefHeight="600.0" prefWidth="700.0" styleClass="main-content-pane">
+         <children>
+            <Label layoutX="20.0" layoutY="14.0" text="User Profile" styleClass="header-label"/>
+
+            <!-- User Profile Information -->
+            <Label layoutX="20.0" layoutY="60.0" text="Full Name:"/>
+            <TextField fx:id="fullNameField" layoutX="150.0" layoutY="60.0" prefWidth="300.0" editable="false"/>
+
+            <Label layoutX="20.0" layoutY="110.0" text="Email:"/>
+            <TextField fx:id="emailField" layoutX="150.0" layoutY="110.0" prefWidth="300.0" editable="false"/>
+
+            <Label layoutX="20.0" layoutY="160.0" text="Phone Number:"/>
+            <TextField fx:id="phoneField" layoutX="150.0" layoutY="160.0" prefWidth="300.0" editable="false"/>
+
+            <Label layoutX="20.0" layoutY="210.0" text="Address:"/>
+            <TextField fx:id="addressField" layoutX="150.0" layoutY="210.0" prefWidth="300.0" editable="false"/>
+
+            <Label layoutX="20.0" layoutY="260.0" text="User Role:"/>
+            <TextField fx:id="roleField" layoutX="150.0" layoutY="260.0" prefWidth="300.0" editable="false"/>
+
+            <!-- Action Buttons -->
+            <Button fx:id="btnEditProfile" layoutX="20.0" layoutY="320.0" text="Edit Profile"/>
+            <Button fx:id="btnChangePassword" layoutX="150.0" layoutY="320.0" text="Change Password"/>
+
+            <!-- Profile Picture (Optional) -->
+            <ImageView fx:id="profilePicture" fitHeight="150.0" fitWidth="150.0" layoutX="500.0" layoutY="60.0">
+               <image>
+                  <Image url="@icons/icons8-user-100.png" />
+               </image>
+            </ImageView>
+
+            <!-- Button to Upload Profile Picture -->
+            <Button fx:id="btnUploadPicture" layoutX="500.0" layoutY="220.0" text="Upload Picture"/>
          </children>
       </Pane>
    </children>

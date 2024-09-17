@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.MutualFundsController">
    <children>
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container" stylesheets="@style.css">
@@ -28,6 +30,26 @@
                   <Image url="@icons/INVESTMATE (3).png" />
                </image>
             </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="200.0" prefHeight="600.0" prefWidth="700.0" styleClass="main-content-pane">
+         <children>
+            <Label layoutX="20.0" layoutY="14.0" text="Mutual Funds Management" styleClass="header-label"/>
+
+            <!-- Table to show Mutual Funds -->
+            <TableView fx:id="mutualFundsTable" layoutX="20.0" layoutY="50.0" prefHeight="400.0" prefWidth="660.0">
+               <columns>
+                  <TableColumn fx:id="colFundName" text="Fund Name" prefWidth="200.0"/>
+                  <TableColumn fx:id="colFundType" text="Fund Type" prefWidth="100.0"/>
+                  <TableColumn fx:id="colReturns" text="Returns (%)" prefWidth="100.0"/>
+                  <TableColumn fx:id="colRisk" text="Risk Level" prefWidth="100.0"/>
+                  <TableColumn fx:id="colInvestmentPeriod" text="Investment Period" prefWidth="160.0"/>
+               </columns>
+            </TableView>
+
+            <!-- Action Buttons -->
+            <Button fx:id="btnViewDetails" layoutX="20.0" layoutY="470.0" text="View Details"/>
+            <Button fx:id="btnAnalyzeFund" layoutX="140.0" layoutY="470.0" text="Analyze Fund"/>
          </children>
       </Pane>
    </children>

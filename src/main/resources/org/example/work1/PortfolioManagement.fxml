@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -8,9 +11,10 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.PortfolioManagementController">
+<AnchorPane maxHeight="600.0" maxWidth="900.0" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.PortfolioManagementController">
    <children>
-      <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container" stylesheets="@style.css">
+      <Label layoutX="200.0" prefHeight="46.0" prefWidth="700.0" styleClass="login-container2" stylesheets="@style.css" text="                                                             Portfolio Overview" />
+      <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container2" stylesheets="@style.css">
          <children>
             <Button fx:id="btnPortfolio" layoutY="119.0" onAction="#handlePortfolioButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Portfolio Management" />
             <Button fx:id="btnSIP" layoutY="169.0" onAction="#handlesipclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="SIP Management" />
@@ -23,11 +27,54 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <ImageView fitHeight="50.0" fitWidth="196.0" layoutX="4.0" layoutY="14.0">
+            <ImageView fitHeight="50.0" fitWidth="196.0" layoutX="4.0" layoutY="10.0">
                <image>
                   <Image url="@icons/INVESTMATE (3).png" />
                </image>
             </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="200.0" layoutY="60.0" prefHeight="539.0" prefWidth="660.0">
+         <children>
+            <Pane layoutX="65.0" layoutY="15.0" prefHeight="110.0" prefWidth="130.0" styleClass="login-container" stylesheets="@style.css">
+               <children>
+                  <Label fx:id="lblTotalValue" layoutX="40.0" layoutY="53.0" text="₹ 0.00" />
+                  <Label layoutX="19.0" layoutY="14.0" text="Total Value: " />
+               </children>
+            </Pane>
+            <Pane layoutX="465.0" layoutY="15.0" prefHeight="110.0" prefWidth="130.0" styleClass="login-container" stylesheets="@style.css">
+               <children>
+                  <Label layoutX="33.0" layoutY="9.0" text="Growth: " />
+                  <Label fx:id="lblGrowth" layoutX="53.0" layoutY="50.0" text="0%" />
+               </children>
+            </Pane>
+            <Pane layoutX="265.0" layoutY="15.0" prefHeight="110.0" prefWidth="130.0" styleClass="login-container" stylesheets="@style.css">
+               <children>
+                  <Label layoutX="26.0" layoutY="9.0" text="Holdings: " />
+                  <Label fx:id="lblHoldings" layoutX="59.0" layoutY="50.0" text="0" />
+               </children>
+            </Pane>
+            <!-- Graph for portfolio performance -->
+            <LineChart fx:id="portfolioGraph" layoutX="10.0" layoutY="135.0" styleClass="login-container" stylesheets="@style.css" title="Portfolio Performance">
+               <xAxis>
+                  <CategoryAxis label="Time" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis label="Value" />
+               </yAxis>
+            </LineChart>
+            <!-- Add/Remove Fund Buttons -->
+            <Pane />
+            <Button layoutX="519.0" layoutY="394.0" prefHeight="33.0" prefWidth="117.0" stylesheets="@style.css" text="Remove Fund">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button layoutX="537.0" layoutY="338.0" prefHeight="33.0" prefWidth="94.0" stylesheets="@style.css" text="Add Fund">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>
