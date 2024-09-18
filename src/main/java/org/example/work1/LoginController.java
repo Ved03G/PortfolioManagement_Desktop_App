@@ -76,6 +76,8 @@ public class LoginController {
 
             if (resultSet.next()) {
                 System.out.println("Login successful!");
+                int userId = resultSet.getInt("userid");
+                UserSession.getInstance(userId);  // Store user ID in session
                 return true;  // User found and role matches
             } else {
                 System.out.println("Invalid username, password, or role.");

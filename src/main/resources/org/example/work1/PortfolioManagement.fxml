@@ -5,13 +5,16 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="600.0" maxWidth="900.0" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.PortfolioManagementController">
+<AnchorPane maxHeight="600.0" maxWidth="900.0" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.PortfolioManagementController">
    <children>
       <Label layoutX="200.0" prefHeight="46.0" prefWidth="700.0" styleClass="login-container2" stylesheets="@style.css" text="                                                             Portfolio Overview" />
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container2" stylesheets="@style.css">
@@ -75,7 +78,47 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Button>
+            <TableView fx:id="investmentTable" layoutX="357.0" layoutY="178.0" prefHeight="124.0" prefWidth="289.0" styleClass="investment-table">
+               <columns>
+                  <TableColumn fx:id="schemeCodeColumn"  prefWidth="100" text="Scheme Code">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="schemeCode" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="schemeNameColumn" prefWidth="200" text="Scheme Name">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="schemeName" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="navColumn" prefWidth="100" text="Latest NAV">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="latestNav" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="amountInvestedColumn" prefWidth="150" text="Amount Invested">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="amountInvested" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="costperunitColumn" prefWidth="150" text="Cost per Unit">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="costPerUnit" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="currentValueColumn" prefWidth="150" text="Current Value">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="currentValue" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="unitsColumn" prefWidth="100" text="Units">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="units" />
+                     </cellValueFactory>
+                  </TableColumn>
+               </columns>
+            </TableView>
          </children>
       </Pane>
+
    </children>
 </AnchorPane>

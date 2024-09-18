@@ -1,19 +1,103 @@
 package org.example.work1;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class PortfolioManagementController {
+
+    @FXML
+    private TableView<MutualFund2> investmentTable;
+
+    @FXML
+    private TableColumn<MutualFund2, String> schemeCodeColumn;
+    @FXML
+    private TableColumn<MutualFund2, String> schemeNameColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> navColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> amountInvestedColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> currentValueColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> costperunitColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> unitsColumn;
 
     private Stage stage;
     private Scene scene;
     private Parent root;
+
+    private ObservableList<MutualFund2> mutualFundsList = FXCollections.observableArrayList();
+
+    public void initialize() {
+        if (schemeCodeColumn != null) {
+            schemeCodeColumn.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
+        } else {
+            System.out.println("Error: schemeCodeColumn is null");
+        }
+        // Initialize table columns
+        schemeCodeColumn.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
+        schemeNameColumn.setCellValueFactory(new PropertyValueFactory<>("schemeName"));
+        navColumn.setCellValueFactory(new PropertyValueFactory<>("nav"));
+        amountInvestedColumn.setCellValueFactory(new PropertyValueFactory<>("amountInvested"));
+        currentValueColumn.setCellValueFactory(new PropertyValueFactory<>("currentValue"));
+        costperunitColumn.setCellValueFactory(new PropertyValueFactory<>("costPerUnit"));
+        unitsColumn.setCellValueFactory(new PropertyValueFactory<>("units"));
+
+        // Load the data from database
+        loadTableData();
+    }
+
+    public void loadTableData() {
+        // Load data from the database into TableView
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            String query = "SELECT scheme_code, fund_name, nav, amount_invested, current_value, units, costperunit FROM mutual_funds";
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                String schemeCode = resultSet.getString("scheme_code");
+                String schemeName = resultSet.getString("fund_name");
+                double nav = resultSet.getDouble("nav");
+                double amountInvested = resultSet.getDouble("amount_invested");
+                double currentValue = resultSet.getDouble("current_value");
+                double units = resultSet.getDouble("units");
+                double costPerUnit = resultSet.getDouble("costperunit");
+
+                // Add data to the list
+                MutualFund2 mutualFund = new MutualFund2(schemeCode, schemeName, nav, amountInvested, currentValue, units, costPerUnit);
+                mutualFundsList.add(mutualFund);
+            }
+
+            // Set the items for the TableView
+            investmentTable.setItems(mutualFundsList);
+
+            // Close resources
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Method to load the FXML of each section
     private void switchToPage(ActionEvent event, String fxmlFile, String title) throws IOException {

@@ -212,3 +212,69 @@
     -fx-background-color: #ECF0F1; /* Light gray background */
     -fx-padding: 20;
 }
+/* General container styling */
+.container {
+    -fx-background-color: #F9F9F9;
+    -fx-padding: 10;
+    -fx-border-color: #E1E1E1;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 0);
+    -fx-spacing: 10;
+}
+
+/* Section Headers */
+.section-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Section Subheaders */
+.section-subheader {
+    -fx-font-size: 12px;
+    -fx-text-fill: #95A5A6;
+}
+
+/* Positive Returns */
+.returns-positive {
+    -fx-text-fill: #27AE60;
+    -fx-font-weight: bold;
+}
+
+/* Not Added Returns */
+.returns-not-added {
+    -fx-text-fill: #7F8C8D;
+    -fx-font-size: 12px;
+}
+
+/* Add Button */
+.add-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3498DB;
+    -fx-font-size: 12px;
+}
+
+/* Link Button */
+.link-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2980B9;
+    -fx-font-size: 12px;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+.investment-table {
+    -fx-background-color: #f8f8f8;
+    -fx-table-cell-border-color: #d0d0d0;
+    -fx-padding: 10px;
+    -fx-border-color: #e0e0e0;
+}
+
+.table-column {
+    -fx-alignment: center-left;
+    -fx-font-size: 14px;
+}
+
+.table-view {
+    -fx-font-family: "Arial";
+}

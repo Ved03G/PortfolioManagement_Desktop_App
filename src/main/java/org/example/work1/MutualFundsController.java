@@ -1,14 +1,25 @@
 package org.example.work1;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public class MutualFundsController {
@@ -17,13 +28,223 @@ public class MutualFundsController {
     private Scene scene;
     private Parent root;
 
-    // Add references to your buttons
-    public Button btnPortfolio;
-    public Button btnSIP;
-    public Button btnMutualFunds;
-    public Button btnReports;
-    public Button btnTransactions;
-    public Button btnProfile;
+    // Sidebar buttons
+    @FXML
+    private Button btnPortfolio, btnSIP, btnMutualFunds, btnReports, btnTransactions, btnProfile;
+
+    // Table and search fields
+    @FXML
+    private TextField searchSchemeCode, searchSchemeName;
+
+    @FXML
+    private TableView<MutualFund> mutualFundTable;
+
+    @FXML
+    private TableColumn<MutualFund, String> columnSchemeCode, columnSchemeName;
+
+    private ObservableList<MutualFund> mutualFundData = FXCollections.observableArrayList();
+    private MutualFund selectedFund;
+    private double currentNav = 0.0;
+
+    // Initialize method to load data into the table and handle sidebar
+    @FXML
+    public void initialize() {
+        columnSchemeCode.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
+        columnSchemeName.setCellValueFactory(new PropertyValueFactory<>("schemeName"));
+
+        loadMutualFunds();  // Load data when initializing
+        // Handle table row selection
+        mutualFundTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                selectedFund = newSelection;
+            }
+        });
+        resetButtonStyles();
+        btnMutualFunds.getStyleClass().add("sidebar-button-active");
+    }
+
+    // Fetch mutual funds from API and populate the table
+    private void loadMutualFunds() {
+        MutualFundFetcher fetcher = new MutualFundFetcher();
+        JSONArray mutualFunds = fetcher.fetchData();
+
+        if (mutualFunds != null) {
+            for (Object obj : mutualFunds) {
+                JSONObject fund = (JSONObject) obj;
+
+                // Handle schemeCode conversion from Long to String
+                Object schemeCodeObj = fund.get("schemeCode");
+                String schemeCode = schemeCodeObj instanceof Long ? String.valueOf(schemeCodeObj) : (String) schemeCodeObj;
+
+                mutualFundData.add(new MutualFund(
+                        schemeCode,
+                        (String) fund.get("schemeName")
+                ));
+            }
+        }
+
+        mutualFundTable.setItems(mutualFundData);
+    }
+
+
+    // Filter table data based on search input
+    @FXML
+    public void onSearch() {
+        String schemeCodeFilter = searchSchemeCode.getText().toLowerCase();
+        String schemeNameFilter = searchSchemeName.getText().toLowerCase();
+
+        ObservableList<MutualFund> filteredData = FXCollections.observableArrayList();
+
+        for (MutualFund fund : mutualFundData) {
+            if (fund.getSchemeCode().toLowerCase().contains(schemeCodeFilter)
+                    && fund.getSchemeName().toLowerCase().contains(schemeNameFilter)) {
+                filteredData.add(fund);
+            }
+        }
+
+        mutualFundTable.setItems(filteredData);
+    }
+    @FXML
+    public void fetchNAVData() {
+        if (selectedFund != null) {
+            MutualFundFetcher fetcher = new MutualFundFetcher();
+            JSONObject fundData = fetcher.fetchFundDataBySchemeCode(selectedFund.getSchemeCode());
+
+            if (fundData != null) {
+                JSONObject data = (JSONObject) ((JSONArray) fundData.get("data")).get(0);
+                String date = (String) data.get("date");
+                currentNav = Double.parseDouble((String) data.get("nav")); // Save NAV for later calculations
+
+                // Show the fetched NAV and date to the user (e.g., in an alert)
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("NAV Data");
+                alert.setHeaderText("NAV Information");
+                alert.setContentText("Date: " + date + "\nNAV: " + currentNav);
+                alert.showAndWait();
+            }
+        } else {
+            // Show error if no fund is selected
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No Mutual Fund Selected");
+            alert.setContentText("Please select a mutual fund first.");
+            alert.showAndWait();
+        }
+    }
+    // Add selected mutual fund to investment
+    @FXML
+    public void addToInvestment() {
+        if (selectedFund != null) {
+            if (currentNav == 0.0) {
+                // Ensure that NAV is fetched before allowing investment
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setHeaderText("NAV Not Fetched");
+                alert.setContentText("Please fetch the NAV data before making an investment.");
+                alert.showAndWait();
+                return;
+            }
+
+            // Show input dialog to ask how much the user wants to invest
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Investment Amount");
+            dialog.setHeaderText("Enter the amount you want to invest:");
+            dialog.setContentText("Amount:");
+
+            // Get user input for investment amount
+            dialog.showAndWait().ifPresent(amountStr -> {
+                try {
+                    double amount = Double.parseDouble(amountStr);
+                    double units = amount / currentNav; // Calculate units based on NAV
+                    units = Math.round(units * 100.0) / 100.0; // Round to 2 decimal places
+                    double currentValue = units * currentNav;
+                    // Save investment details to the database
+                    saveInvestmentToDatabase(amount, units, currentValue);
+                    // Show investment information
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Investment Successful");
+                    alert.setHeaderText("Investment Details");
+                    alert.setContentText(
+                            "You have invested Rs. " + amount + " in " + selectedFund.getSchemeName() + ".\n\n" +
+                                    "You will receive " + units + " units based on the current NAV of " + currentNav + "."
+                    );
+
+                    alert.showAndWait();
+                } catch (NumberFormatException e) {
+                    // Handle invalid input
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Invalid Input");
+                    alert.setContentText("Please enter a valid number for the amount.");
+                    alert.showAndWait();
+                }
+            });
+        } else {
+            // Show error if no fund is selected
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No Mutual Fund Selected");
+            alert.setContentText("Please select a mutual fund first.");
+            alert.showAndWait();
+        }
+    }
+    // Function to save investment details to the database
+    private void saveInvestmentToDatabase(double amountInvested, double units, double currentValue) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            String insertQuery = "INSERT INTO mutual_funds (user_id, fund_name, amount_invested, current_value, investment_date, scheme_code, nav, units) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(insertQuery);
+
+            // Assuming you have a method to get the current user ID
+            int userId = getCurrentUserId();
+
+            ps.setInt(1, userId);  // user_id
+            ps.setString(2, selectedFund.getSchemeName());  // fund_name
+            ps.setDouble(3, amountInvested);  // amount_invested
+            ps.setDouble(4, currentValue);  // current_value
+            ps.setTimestamp(5, new Timestamp(new Date().getTime()));  // investment_date
+            ps.setString(6, selectedFund.getSchemeCode());  // scheme_code
+            ps.setDouble(7, currentNav);// nav
+            ps.setDouble(8, units);
+
+            ps.executeUpdate();
+
+            System.out.println("Investment details saved to the database.");
+        } catch (SQLException e) {
+            System.err.println("SQL Error:");
+            System.err.println("Message: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
+            e.printStackTrace();
+        }
+    }
+    private int getCurrentUserId() {
+        return UserSession.getInstance().getUserId();
+    }
+
+    // Add selected mutual fund to portfolio
+    @FXML
+    public void addToPortfolio() {
+        if (selectedFund != null) {
+            // Logic to add the selected mutual fund to the user's portfolio
+            // This can involve saving it to a database or a file
+
+            // Simulating a successful portfolio addition with an alert
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Portfolio");
+            alert.setHeaderText("Mutual Fund Added");
+            alert.setContentText("The mutual fund '" + selectedFund.getSchemeName() + "' has been added to your portfolio.");
+            alert.showAndWait();
+        } else {
+            // Show error if no fund is selected
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No Mutual Fund Selected");
+            alert.setContentText("Please select a mutual fund first.");
+            alert.showAndWait();
+        }
+    }
 
     // Method to load the FXML of each section
     private void switchToPage(ActionEvent event, String fxmlFile, String title, Button clickedButton) throws IOException {
@@ -48,6 +269,7 @@ public class MutualFundsController {
         }
     }
 
+    // Sidebar button handlers
     public void handlePortfolioButtonClick(ActionEvent event) throws IOException {
         switchToPage(event, "PortfolioManagement.fxml", "Portfolio Management", btnPortfolio);
     }

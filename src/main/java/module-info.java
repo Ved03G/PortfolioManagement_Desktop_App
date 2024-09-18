@@ -11,6 +11,7 @@ module org.example.work1 {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires json.simple;
 
     opens org.example.work1 to javafx.fxml;
     exports org.example.work1;
