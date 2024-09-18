@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -40,7 +41,10 @@ public class PortfolioManagementController {
     private TextArea amountInvestedTextArea;
     @FXML
     private TextArea currentValueTextArea;
-
+    @FXML
+    private Label totalGainLabel;  // For label with styleClass "buttonL"
+    @FXML
+    private Label unrealizedGainLabel;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -74,7 +78,7 @@ public class PortfolioManagementController {
             String query = "SELECT amount_invested, current_value FROM portfolio WHERE user_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, userId);
-
+            calculateGains();
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 // Set the values in the TextAreas
@@ -94,6 +98,52 @@ public class PortfolioManagementController {
             resultSet.close();
             preparedStatement.close();
             connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void calculateGains() {
+        double totalGain = 0.0;
+        double unrealizedGain = 0.0;
+
+        try {
+            // Fetch data from mutual_funds
+            Connection connection = DatabaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            String query = "SELECT amount_invested, current_value, nav, costperunit FROM mutual_funds";
+            ResultSet resultSet = statement.executeQuery(query);
+
+            int rowCount = 0;
+            while (resultSet.next()) {
+                double amountInvested = resultSet.getDouble("amount_invested");
+                double currentValue = resultSet.getDouble("current_value");
+                float nav = resultSet.getFloat("nav");
+                double costperunit = resultSet.getDouble("costperunit");
+                totalGain += (currentValue - amountInvested);  // Gain calculation
+                if (costperunit != 0) {
+                    double navGainPercentage = ((nav - costperunit) / costperunit) * 100;
+                    unrealizedGain += navGainPercentage;
+                } else {
+                    // Handle cases where initial_nav_per_unit is zero
+                    // You might want to log this or handle it differently based on your use case
+                    System.err.println("Initial NAV per Unit is zero, skipping NAV Gain calculation for this record.");
+                }
+
+                rowCount = 0;
+                rowCount++;
+            }
+
+
+            resultSet.close();
+
+            // Update the labels
+            totalGainLabel.setText(String.format(" %.2f%%", totalGain));  // Display total gain
+            if (rowCount > 0) {
+                unrealizedGainLabel.setText(String.format("%.2f%%", unrealizedGain / rowCount));  // Display average NAV gain percentage
+            } else {
+                unrealizedGainLabel.setText("N/A");  // No data to display
+            }  // Display unrealized gain
 
         } catch (SQLException e) {
             e.printStackTrace();

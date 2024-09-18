@@ -19,11 +19,7 @@ public class MutualFund2 {
         this.costPerUnit = costPerUnit;
 
         // Avoid division by zero
-        if (units != 0) {
-            this.costPerUnit = amountInvested / units;
-        } else {
-            this.costPerUnit = 0;  // Default to 0 if no units
-        }
+
     }
 
     // Getters and setters for all properties
