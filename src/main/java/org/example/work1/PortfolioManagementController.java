@@ -10,14 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class PortfolioManagementController {
 
@@ -38,6 +36,10 @@ public class PortfolioManagementController {
     private TableColumn<MutualFund2, Double> costperunitColumn;
     @FXML
     private TableColumn<MutualFund2, Double> unitsColumn;
+    @FXML
+    private TextArea amountInvestedTextArea;
+    @FXML
+    private TextArea currentValueTextArea;
 
     private Stage stage;
     private Scene scene;
@@ -62,6 +64,40 @@ public class PortfolioManagementController {
 
         // Load the data from database
         loadTableData();
+    }
+    private int getCurrentUserId() {
+        return UserSession.getInstance().getUserId();
+    }
+    public void loadPortfolioData(int userId) {
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            String query = "SELECT amount_invested, current_value FROM portfolio WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                // Set the values in the TextAreas
+                double amountInvested = resultSet.getDouble("amount_invested");
+                double currentValue = resultSet.getDouble("current_value");
+
+// Format to 4 decimal places
+                String formattedCurrentValue = String.format("%.4f", currentValue);
+
+// If you want to use the value elsewhere as a double
+                double roundedCurrentValue = Double.parseDouble(formattedCurrentValue);
+
+                amountInvestedTextArea.setText(String.valueOf(amountInvested));
+                currentValueTextArea.setText(String.valueOf(roundedCurrentValue));
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadTableData() {
@@ -88,13 +124,18 @@ public class PortfolioManagementController {
 
             // Set the items for the TableView
             investmentTable.setItems(mutualFundsList);
-
+            int userId = getCurrentUserId();
+            loadPortfolioData(userId);
             // Close resources
             resultSet.close();
             statement.close();
             connection.close();
 
         } catch (SQLException e) {
+            System.err.println("SQL Error:");
+            System.err.println("Message: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
             e.printStackTrace();
         }
     }

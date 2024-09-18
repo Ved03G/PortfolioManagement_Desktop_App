@@ -11,7 +11,7 @@
 <?import javafx.scene.control.TextField?>
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.UserProfileController">
    <children>
-      <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container" stylesheets="@style.css">
+      <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container2" stylesheets="@style.css">
          <children>
             <Button fx:id="btnPortfolio" layoutY="119.0" onAction="#handlePortfolioButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Portfolio Management" />
             <Button fx:id="btnSIP" layoutY="169.0" onAction="#handlesipclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="SIP Management" />

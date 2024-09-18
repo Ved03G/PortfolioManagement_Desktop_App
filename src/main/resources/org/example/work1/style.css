@@ -38,12 +38,10 @@
     -fx-background-color: white;
     -fx-border-radius: 15;
     -fx-background-radius: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.5, 0, 0);
     -fx-padding: 20;
 }
 .login-container2{
     -fx-background-color: white;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.5, 0, 0);
     -fx-padding: 20;
 }
 /* Style the body */
@@ -161,9 +159,14 @@
     -fx-background-color: #7E57C2;
     -fx-text-fill: white;
 }
+.sidebar-button:pressed{
+    -fx-font-weight: bold;
+    -fx-background-color: #7E57C2;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+}
 .sidebar-button-active {
     -fx-font-weight: bold;
-    -fx-background-radius: 20;
     -fx-background-color: #7E57C2;
     -fx-text-fill: white;
     -fx-padding: 10px 20px;
@@ -264,11 +267,34 @@
     -fx-cursor: hand;
 }
 .investment-table {
-    -fx-background-color: #f8f8f8;
-    -fx-table-cell-border-color: #d0d0d0;
+    -fx-background-color: white;
+    -fx-table-cell-border-color: #EBDCF0;
     -fx-padding: 10px;
     -fx-border-color: #e0e0e0;
 }
+/* Style for the table headers */
+.investment-table .column-header-background {
+    -fx-background-color: #EBDCF0; /* Column header background color */
+    -fx-border-color: #b0b0b0;
+    -fx-table-cell-border-color: #b0b0b0;
+}
+
+/* Style for table rows */
+.investment-table .table-row-cell {
+    -fx-background-color: #ffffff; /* Data row background color */
+    -fx-border-color: #e0e0e0;
+}
+
+/* Alternate row color */
+.investment-table .table-row-cell:odd {
+    -fx-background-color: #f0f0f0; /* Alternate row background */
+}
+
+/* Row selection color */
+.investment-table .table-row-cell:selected {
+    -fx-background-color: #add8e6; /* Selected row background color */
+}
+
 
 .table-column {
     -fx-alignment: center-left;
@@ -278,3 +304,93 @@
 .table-view {
     -fx-font-family: "Arial";
 }
+.container1 {
+    -fx-background-color: #EBDCF0;
+    -fx-border-radius: 0px;
+    -fx-border-width: 1px;
+    -fx-border-color: #F6F6F6FF;
+    -fx-border-style: solid;
+    -fx-box-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f; /* shadow-xs */
+    -fx-table-row-cell-color:white;
+    -fx-table-cell-border-color: #d0d0d0;
+    -fx-table-row-selected-color:#EBDCF0;
+}
+.container1:selected{
+    -fx-background-color: #d1e7fd;
+}
+.container2 {
+    -fx-padding: 20;
+    -fx-background-color: #FFFFFEFF;
+    -fx-border-radius: 4px; /* border-m */
+    -fx-border-width: 1px;
+    -fx-border-color: #F6F6F6FF;
+    -fx-border-style: solid;
+    -fx-box-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f; /* shadow-xs */
+}
+.buttonL {
+    -fx-font-family: Manrope;
+    -fx-font-size: 13px;
+    -fx-line-height: 20px;
+    -fx-font-weight: 400;
+    -fx-text-fill: #1dc95f;
+    -fx-color: #69955CFF;
+    -fx-background-color: #E6F7DCFF;
+    -fx-opacity: 1;
+    -fx-border: none;
+    -fx-border-radius: 3px; /* border-s */
+    -fx-gap: 4px;
+}
+.buttonL2{
+    -fx-font-family: Manrope;
+    -fx-font-size: 13px;
+    -fx-line-height: 20px;
+    -fx-font-weight: 400;
+    -fx-text-fill: #CC3300;
+    -fx-background-color: #FFF5F3;
+    -fx-opacity: 1;
+    -fx-border: none;
+    -fx-border-radius: 3px; /* border-s */
+    -fx-gap: 4px;
+    -fx-box-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f;
+}
+.buttonL3{
+    -fx-font-family: Manrope;
+    -fx-font-size: 13px;
+    -fx-line-height: 20px;
+    -fx-font-weight: 400;
+    -fx-text-fill: WHITE;
+    -fx-font-style: BOLD;
+    -fx-background-color: #140F1B;
+    -fx-opacity: 1;
+    -fx-border: none;
+    -fx-border-radius: 3px; /* border-s */
+    -fx-gap: 4px;
+    -fx-box-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f;
+}
+.table-view .column-header-background {
+    -fx-background-color: #EBDCF0;
+    -fx-border-radius: 0px;
+    -fx-border-width: 1px;
+    -fx-border-color: #F6F6F6FF;
+    -fx-border-style: solid;
+    -fx-box-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f; /* shadow-xs */ /* Keep original style for column header */
+}
+
+/* Change the row color of the table */
+.table-row-cell {
+    -fx-background-color: white; /* Default row color */
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9; /* Color for odd rows */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #d1e7fd; /* Highlight color for selected row */
+}
+.text-area3 {
+    -fx-border-color: transparent;   /* Remove border */
+    -fx-font-size: 16px;             /* Increase font size */
+    -fx-text-fill: green;            /* Set text color to green */
+    -fx-background-radius: 0;        /* Remove background border radius */
+    -fx-background-color: transparent;}

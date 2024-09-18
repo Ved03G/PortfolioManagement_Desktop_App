@@ -98,7 +98,7 @@ public class LoginController {
     private void loadClientDashboard() {
         try {
             // Load the Client Dashboard FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ClientDashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("PortfolioManagement.fxml"));
             Parent root = loader.load();
 
             // Get the current stage and set the scene to Client Dashboard

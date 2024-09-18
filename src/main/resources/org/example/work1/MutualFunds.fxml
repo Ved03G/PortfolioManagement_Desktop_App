@@ -15,7 +15,8 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.MutualFundsController">
    <children>
-      <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container" stylesheets="@style.css">
+      <Label layoutX="200.0" layoutY="60.0" prefHeight="46.0" prefWidth="700.0" styleClass="login-container2" stylesheets="@style.css" />
+      <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container2" stylesheets="@style.css">
          <children>
             <Button fx:id="btnPortfolio" layoutY="119.0" onAction="#handlePortfolioButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="Portfolio Management" />
             <Button fx:id="btnSIP" layoutY="169.0" onAction="#handlesipclick" prefHeight="50.0" prefWidth="200.0" styleClass="sidebar-button" text="SIP Management" />
@@ -38,7 +39,7 @@
       <HBox layoutX="10" layoutY="10" spacing="10" />
 
       <!-- Table Section -->
-      <TableView fx:id="mutualFundTable" layoutX="236.0" layoutY="150.0" prefHeight="400" prefWidth="447.0">
+      <TableView fx:id="mutualFundTable" layoutX="226.0" layoutY="116.0" prefHeight="225.0" prefWidth="447.0" styleClass="investment-table" stylesheets="@style.css">
          <columns>
             <!-- Scheme Code Column -->
             <TableColumn fx:id="columnSchemeCode" prefWidth="150" text="Scheme Code">
@@ -54,13 +55,71 @@
             </TableColumn>
          </columns>
       </TableView>
-      <Label layoutX="240.0" layoutY="112.0" text="Search by Scheme Code: " />
-      <TextField fx:id="searchSchemeCode" layoutX="384.0" layoutY="112.0" onKeyReleased="#onSearch" promptText="Scheme Code" />
-      <Label layoutX="544.0" layoutY="112.0" text="Search by Scheme Name: " />
-      <TextField fx:id="searchSchemeName" layoutX="692.0" layoutY="112.0" onKeyReleased="#onSearch" promptText="Scheme Name" />
-      <HBox layoutX="236.0" layoutY="560.0" spacing="10">
-         <Button onAction="#fetchNAVData" text="Fetch NAV Data" />
-         <Button text="Add to Investment" onAction="#addToInvestment" />
-      </HBox>
+      <TableView fx:id="investmentTable" layoutX="207.0" layoutY="393.0" prefHeight="154.0" prefWidth="686.0"  styleClass="investment-table" stylesheets="@style.css">
+         <columns>
+            <TableColumn fx:id="schemeCodeColumn" prefWidth="127.20001220703125" text="Scheme Code">
+               <cellValueFactory>
+                  <PropertyValueFactory property="schemeCode" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="schemeNameColumn" prefWidth="155.199951171875" text="Scheme Name">
+               <cellValueFactory>
+                  <PropertyValueFactory property="schemeName" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="navColumn" prefWidth="117.60003662109375" text="Latest NAV">
+               <cellValueFactory>
+                  <PropertyValueFactory property="latestNav" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="amountInvestedColumn" prefWidth="150" text="Amount Invested">
+               <cellValueFactory>
+                  <PropertyValueFactory property="amountInvested" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="costperunitColumn" prefWidth="150" text="Cost per Unit">
+               <cellValueFactory>
+                  <PropertyValueFactory property="costPerUnit" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="currentValueColumn" prefWidth="150" text="Current Value">
+               <cellValueFactory>
+                  <PropertyValueFactory property="currentValue" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="unitsColumn" prefWidth="100" text="Units">
+               <cellValueFactory>
+                  <PropertyValueFactory property="units" />
+               </cellValueFactory>
+            </TableColumn>
+         </columns>
+      </TableView>
+      <Label layoutX="240.0" layoutY="74.0" text="Search by Scheme Code: ">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <TextField fx:id="searchSchemeCode" layoutX="384.0" layoutY="74.0" onKeyReleased="#onSearch" promptText="Scheme Code" />
+      <Label layoutX="544.0" layoutY="74.0" text="Search by Scheme Name: "><font>
+      <Font name="System Bold" size="12.0" />
+   </font></Label>
+      <TextField fx:id="searchSchemeName" layoutX="692.0" layoutY="74.0" onKeyReleased="#onSearch" promptText="Scheme Name" />
+      <HBox layoutX="236.0" layoutY="560.0" spacing="10" />
+      <Label layoutX="200.0" prefHeight="46.0" prefWidth="700.0" styleClass="login-container2" stylesheets="@style.css" text="                                                             MUTUAL FUNDS" />
+      <Button layoutX="696.0" layoutY="249.0" onAction="#addToInvestment" prefHeight="26.0" prefWidth="171.0" stylesheets="@style.css" text="Add to Investment" />
+      <Button layoutX="722.0" layoutY="190.0" onAction="#fetchNAVData" prefHeight="26.0" prefWidth="118.0" stylesheets="@style.css" text="Fetch NAV Data" />
+      <Label layoutX="200.0" layoutY="347.0" prefHeight="46.0" prefWidth="700.0" styleClass="login-container2" stylesheets="@style.css" />
+      <Label layoutX="240.0" layoutY="361.0" text="Search by Scheme Code: ">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <TextField fx:id="searchSchemeCode1" layoutX="384.0" layoutY="361.0" onKeyReleased="#onInvestmentSearch" promptText="Scheme Code" />
+      <Label layoutX="544.0" layoutY="361.0" text="Search by Scheme Name: ">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <TextField fx:id="searchSchemeName1" layoutX="692.0" layoutY="361.0" onKeyReleased="#onInvestmentSearch" promptText="Scheme Name" />
+      <Button layoutX="690.0" layoutY="555.0" onAction="#handleSellFund" prefHeight="26.0" prefWidth="171.0" stylesheets="@style.css" text="Sell Fund" />
    </children>
 </AnchorPane>

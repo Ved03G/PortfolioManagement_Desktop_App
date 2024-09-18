@@ -15,10 +15,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +26,27 @@ public class MutualFundsController {
     private Parent root;
 
     // Sidebar buttons
+    @FXML
+    private TableView<MutualFund2> investmentTable;
+    @FXML
+    private TextField searchSchemeCode1, searchSchemeName1;
+    @FXML
+    private TableColumn<MutualFund2, String> schemeCodeColumn;
+    @FXML
+    private TableColumn<MutualFund2, String> schemeNameColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> navColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> amountInvestedColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> currentValueColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> costperunitColumn;
+    @FXML
+    private TableColumn<MutualFund2, Double> unitsColumn;
+
+    private ObservableList<MutualFund2> mutualFundsList = FXCollections.observableArrayList();
+
     @FXML
     private Button btnPortfolio, btnSIP, btnMutualFunds, btnReports, btnTransactions, btnProfile;
 
@@ -49,6 +67,24 @@ public class MutualFundsController {
     // Initialize method to load data into the table and handle sidebar
     @FXML
     public void initialize() {
+        if (schemeCodeColumn != null) {
+            schemeCodeColumn.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
+        } else {
+            System.out.println("Error: schemeCodeColumn is null");
+        }
+        // Initialize table columns
+        schemeCodeColumn.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
+        schemeNameColumn.setCellValueFactory(new PropertyValueFactory<>("schemeName"));
+        navColumn.setCellValueFactory(new PropertyValueFactory<>("nav"));
+        amountInvestedColumn.setCellValueFactory(new PropertyValueFactory<>("amountInvested"));
+        currentValueColumn.setCellValueFactory(new PropertyValueFactory<>("currentValue"));
+        costperunitColumn.setCellValueFactory(new PropertyValueFactory<>("costPerUnit"));
+        unitsColumn.setCellValueFactory(new PropertyValueFactory<>("units"));
+
+        // Load the data from database
+        loadTableData();
+
+
         columnSchemeCode.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
         columnSchemeName.setCellValueFactory(new PropertyValueFactory<>("schemeName"));
 
@@ -62,7 +98,40 @@ public class MutualFundsController {
         resetButtonStyles();
         btnMutualFunds.getStyleClass().add("sidebar-button-active");
     }
+    public void loadTableData() {
+        // Load data from the database into TableView
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            Statement statement = connection.createStatement();
+            String query = "SELECT scheme_code, fund_name, nav, amount_invested, current_value, units, costperunit FROM mutual_funds";
+            ResultSet resultSet = statement.executeQuery(query);
 
+            while (resultSet.next()) {
+                String schemeCode = resultSet.getString("scheme_code");
+                String schemeName = resultSet.getString("fund_name");
+                double nav = resultSet.getDouble("nav");
+                double amountInvested = resultSet.getDouble("amount_invested");
+                double currentValue = resultSet.getDouble("current_value");
+                double units = resultSet.getDouble("units");
+                double costPerUnit = resultSet.getDouble("costperunit");
+
+                // Add data to the list
+                MutualFund2 mutualFund = new MutualFund2(schemeCode, schemeName, nav, amountInvested, currentValue, units, costPerUnit);
+                mutualFundsList.add(mutualFund);
+            }
+
+            // Set the items for the TableView
+            investmentTable.setItems(mutualFundsList);
+
+            // Close resources
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     // Fetch mutual funds from API and populate the table
     private void loadMutualFunds() {
         MutualFundFetcher fetcher = new MutualFundFetcher();
@@ -104,6 +173,23 @@ public class MutualFundsController {
 
         mutualFundTable.setItems(filteredData);
     }
+    @FXML
+    public void onInvestmentSearch() {
+        String schemeCodeFilter = searchSchemeCode1.getText().toLowerCase();
+        String schemeNameFilter = searchSchemeName1.getText().toLowerCase();
+
+        ObservableList<MutualFund2> filteredData = FXCollections.observableArrayList();
+
+        for (MutualFund2 fund : mutualFundsList) {
+            if (fund.getSchemeCode().toLowerCase().contains(schemeCodeFilter)
+                    && fund.getSchemeName().toLowerCase().contains(schemeNameFilter)) {
+                filteredData.add(fund);
+            }
+        }
+
+        investmentTable.setItems(filteredData);
+    }
+
     @FXML
     public void fetchNAVData() {
         if (selectedFund != null) {
@@ -198,6 +284,7 @@ public class MutualFundsController {
 
             // Assuming you have a method to get the current user ID
             int userId = getCurrentUserId();
+            updatePortfolio(userId);
 
             ps.setInt(1, userId);  // user_id
             ps.setString(2, selectedFund.getSchemeName());  // fund_name
@@ -222,29 +309,102 @@ public class MutualFundsController {
     private int getCurrentUserId() {
         return UserSession.getInstance().getUserId();
     }
+    public void updatePortfolio(int userId) {
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            Statement statement = connection.createStatement();
 
-    // Add selected mutual fund to portfolio
+            // Query to calculate the sum of amount_invested and current_value
+            String sumQuery = "SELECT SUM(amount_invested) AS totalAmountInvested, SUM(current_value) AS totalCurrentValue FROM mutual_funds";
+            ResultSet resultSet = statement.executeQuery(sumQuery);
+
+            if (resultSet.next()) {
+                double totalAmountInvested = resultSet.getDouble("totalAmountInvested");
+                double totalCurrentValue = resultSet.getDouble("totalCurrentValue");
+
+                // Insert the calculated data into the portfolio table
+                String insertQuery = "INSERT INTO portfolio (user_id, amount_invested, current_value) VALUES (?, ?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+                preparedStatement.setInt(1, userId);
+                preparedStatement.setDouble(2, totalAmountInvested);
+                preparedStatement.setDouble(3, totalCurrentValue);
+
+                // Execute the insertion
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+            }
+
+            // Close resources
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            System.err.println("SQL Error:");
+            System.err.println("Message: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
+            e.printStackTrace();
+        }
+    }
+
+    // Method to handle the selling of a fund
     @FXML
-    public void addToPortfolio() {
-        if (selectedFund != null) {
-            // Logic to add the selected mutual fund to the user's portfolio
-            // This can involve saving it to a database or a file
+    public void handleSellFund(ActionEvent event) {
+        MutualFund2 selectedfund = investmentTable.getSelectionModel().getSelectedItem();
 
-            // Simulating a successful portfolio addition with an alert
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Portfolio");
-            alert.setHeaderText("Mutual Fund Added");
-            alert.setContentText("The mutual fund '" + selectedFund.getSchemeName() + "' has been added to your portfolio.");
-            alert.showAndWait();
+        if (selectedfund != null) {
+            // Confirm with the user before deleting
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Sell Fund");
+            confirmation.setHeaderText("Sell Fund: " + selectedfund.getSchemeName());
+            confirmation.setContentText("Are you sure you want to sell this fund?");
+
+            confirmation.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    // Proceed to delete the record from the database
+                    deleteFundFromDatabase(selectedfund);
+
+                    // Remove the fund from the table
+                    investmentTable.getItems().remove(selectedfund);
+
+                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                    successAlert.setTitle("Success");
+                    successAlert.setHeaderText("Fund Sold");
+                    successAlert.setContentText("The mutual fund has been successfully sold.");
+                    successAlert.showAndWait();
+                }
+            });
         } else {
             // Show error if no fund is selected
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("No Mutual Fund Selected");
-            alert.setContentText("Please select a mutual fund first.");
+            alert.setContentText("Please select a mutual fund to sell.");
             alert.showAndWait();
         }
     }
+
+    // Method to delete the selected fund from the database
+    private void deleteFundFromDatabase(MutualFund2 fund) {
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            String deleteQuery = "DELETE FROM mutual_funds WHERE scheme_code = ?";
+            PreparedStatement ps = connection.prepareStatement(deleteQuery);
+
+            ps.setString(1, fund.getSchemeCode());  // Set the scheme code of the selected fund
+
+            ps.executeUpdate();  // Execute the deletion
+
+            ps.close();
+            connection.close();
+
+            System.out.println("Fund deleted from database.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Method to load the FXML of each section
     private void switchToPage(ActionEvent event, String fxmlFile, String title, Button clickedButton) throws IOException {

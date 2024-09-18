@@ -29,7 +29,7 @@
             </Pane>
          </left>
          <center>
-            <Pane prefHeight="600.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+            <Pane prefHeight="600.0" prefWidth="500.0" BorderPane.alignment="CENTER" stylesheets="@style.css">
                <children>
                   <AnchorPane layoutX="68.0" layoutY="35.0" prefHeight="530.0" prefWidth="360.0" styleClass="login-container" stylesheets="@style.css">
                      <children>
