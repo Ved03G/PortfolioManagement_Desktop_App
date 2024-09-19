@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.SIPManagementController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.SIPManagementController">
    <children>
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container2" stylesheets="@style.css">
          <children>
@@ -38,11 +32,14 @@
          <children>
 
             <!-- Action Buttons -->
-            <Button fx:id="btnAddSIP" layoutX="227.0" layoutY="470.0" text="SELL SIP" />
-            <Button fx:id="btnStartSIP" layoutX="320.0" layoutY="470.0" text="START NEW SIP" />
+            <Button fx:id="btnAddSIP" layoutX="227.0" layoutY="470.0" onAction="#handlesellclick" text="SELL SIP" />
+            <Button fx:id="btnStartSIP" layoutX="320.0" layoutY="470.0" onAction="#handleStartsipclick" text="START NEW SIP" />
             <Label prefHeight="46.0" prefWidth="700.0" styleClass="login-container2" stylesheets="@style.css" text="                                                                      SIP DATA" />
-            <ListView fx:id="sipListView" layoutX="118.0" layoutY="216.0" prefHeight="259.0" prefWidth="342.0" />
-            <ScrollPane layoutX="336.0" layoutY="88.0" />
+            <ScrollPane layoutX="118.0" layoutY="187.0">
+               <content>
+                  <ListView fx:id="sipListView" prefHeight="259.0" prefWidth="389.0" />
+               </content>
+            </ScrollPane>
             <TextField fx:id="searchField" layoutX="134.0" layoutY="140.0" promptText="Search for Sip" />
          </children>
       </Pane>

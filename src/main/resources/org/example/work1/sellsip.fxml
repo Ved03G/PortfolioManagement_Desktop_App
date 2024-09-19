@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.collections.FXCollections?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.work1.SellFundController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+
+    <!-- Title Label -->
+    <Label text="Sell Mutual Fund" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <!-- Search Fund TextField -->
+    <TextField fx:id="fundSearchField" promptText="Search fund by name..." style="-fx-font-size: 14px;" />
+
+    <!-- Search Suggestions ListView -->
+    <ListView fx:id="fundListView" style="-fx-font-size: 14px;" maxHeight="100">
+        <items>
+            <FXCollections fx:factory="observableArrayList"/>
+        </items>
+    </ListView>
+
+    <!-- Label for Showing Units Held by Client -->
+    <Label text="Units Held:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label fx:id="unitsHeldLabel" text="0" style="-fx-font-size: 14px;" />
+
+    <!-- Units to Sell TextField -->
+    <TextField fx:id="unitsToSellField" promptText="Enter units to sell..." style="-fx-font-size: 14px;" />
+
+    <!-- Sell Button -->
+    <Button text="Sell" onAction="#handleSellAction" style="-fx-font-size: 14px;" />
+
+    <!-- Status Label -->
+    <Label fx:id="statusLabel" style="-fx-text-fill: red; -fx-font-size: 12px;" />
+</VBox>

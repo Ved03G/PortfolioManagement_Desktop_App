@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_LEFT" prefHeight="422.0" prefWidth="531.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.SIPController">
+    <children>
+        <HBox spacing="10">
+            <Label text="Search Mutual Fund:" />
+            <TextField fx:id="fundSearchField" prefWidth="200" promptText="Type to search mutual fund..." />
+        </HBox>
+        <ListView fx:id="fundListView" prefHeight="150" visible="false" />
+
+        <!-- Other fields for SIP investment -->
+        <HBox spacing="10">
+            <Label text="SIP Amount:" />
+            <TextField fx:id="sipAmountField" prefWidth="200" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="Frequency:" />
+            <ChoiceBox fx:id="frequencyChoiceBox" prefWidth="200" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="Start Date:" />
+            <DatePicker fx:id="startDatePicker" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="End Date:" />
+            <DatePicker fx:id="endDatePicker" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="NAV:" />
+            <Label fx:id="navLabel" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="Total Units:" />
+            <Label fx:id="totalUnitsLabel" />
+        </HBox>
+        <Button onAction="#handleSIPInvestment" text="Invest" />
+    </children>
+</VBox>

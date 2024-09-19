@@ -15,7 +15,7 @@ module org.example.work1 {
     requires com.fasterxml.jackson.databind;
     requires java.net.http;
     requires java.desktop;
-
+    requires de.jensd.fx.glyphs.fontawesome;
     opens org.example.work1 to javafx.fxml;
     exports org.example.work1;
 }

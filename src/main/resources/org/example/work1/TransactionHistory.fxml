@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="600.0" maxWidth="900.0" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.TransactionHistoryController">
+<AnchorPane maxHeight="600.0" maxWidth="900.0" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.TransactionHistoryController">
    <children>
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container2" stylesheets="@style.css">
          <children>
@@ -36,66 +27,10 @@
             </ImageView>
          </children>
       </Pane>
-      <!-- Transactions Section -->
-      <VBox layoutX="222.0" layoutY="14.0" prefHeight="300" prefWidth="250" styleClass="container">
-         <Label styleClass="section-header" text="Transactions" />
-         <Label styleClass="section-subheader" text="Amount invested annually, net of withdrawals" />
-         <BarChart fx:id="transactionsBarChart" prefHeight="200.0" prefWidth="200.0" title="">
-            <xAxis>
-               <CategoryAxis label="Fiscal Year" />
-            </xAxis>
-            <yAxis>
-               <NumberAxis label="Amount" />
-            </yAxis>
-         </BarChart>
-         <Button styleClass="link-button" text="See All Transactions" />
-      </VBox>
-
-      <!-- Estimated Tax Section -->
-      <VBox layoutX="373.0" layoutY="271.0" prefHeight="300" prefWidth="250" styleClass="container">
-         <Label styleClass="section-header" text="Estimated Tax" />
-         <Label styleClass="section-subheader" text="FY 2024-25: ₹0" />
-         <BarChart fx:id="taxBarChart" prefHeight="200.0" prefWidth="200.0" title="">
-            <xAxis>
-               <CategoryAxis label="Tax Type" />
-            </xAxis>
-            <yAxis>
-               <NumberAxis label="Amount (₹)" />
-            </yAxis>
-         </BarChart>
-         <Button styleClass="link-button" text="More Details" />
-      </VBox>
-
-      <!-- Returns by Investment Type Section -->
-      <VBox layoutX="635.0" layoutY="190.0" prefHeight="300" prefWidth="250" styleClass="container">
-         <Label styleClass="section-header" text="Returns by Investment Type" />
-         <Label styleClass="section-subheader" text="Duration" />
-         <ComboBox fx:id="durationComboBox" prefWidth="120" />
-         <VBox>
-            <HBox>
-               <Label text="Mutual Funds" />
-               <Label styleClass="returns-positive" text="₹+2.14 Lakh (12.8% p.a.)" />
-            </HBox>
-            <HBox>
-               <Label text="Stocks" />
-               <Label styleClass="returns-positive" text="₹+1.36 Lakh (21.9% p.a.)" />
-            </HBox>
-            <HBox>
-               <Label text="NPS" />
-               <Label styleClass="returns-not-added" text="Not Added" />
-               <Button styleClass="add-button" text="+Add" />
-            </HBox>
-            <HBox>
-               <Label text="Fixed Income" />
-               <Label styleClass="returns-not-added" text="Not Added" />
-               <Button styleClass="add-button" text="+Add" />
-            </HBox>
-            <HBox>
-               <Label text="PPF" />
-               <Label styleClass="returns-not-added" text="Not Added" />
-               <Button styleClass="add-button" text="+Add" />
-            </HBox>
-         </VBox>
-      </VBox>
+      <ScrollPane layoutX="223.0" layoutY="55.0">
+         <content>
+            <ListView prefHeight="526.0" prefWidth="646.0" />
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

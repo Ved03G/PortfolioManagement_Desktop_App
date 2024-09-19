@@ -75,7 +75,12 @@ public class SIPManagementController {
     public void handleprofileclick(ActionEvent event) throws IOException {
         switchToPage(event, "UserProfile.fxml", "User Profile");
     }
-
+    public void handleStartsipclick(ActionEvent event) throws IOException {
+        switchToPage(event, "addsip.fxml", "ADD SIP");
+    }
+    public void handlesellclick(ActionEvent event) throws IOException {
+        switchToPage(event, "sellsip.fxml", "SELL SIP");
+    }
     @FXML
     private void initialize() {
         sipListView.setCellFactory(listView -> {
@@ -192,4 +197,7 @@ public class SIPManagementController {
         }
         sipListView.setItems(filteredList);
     }
+
+
+
 }
