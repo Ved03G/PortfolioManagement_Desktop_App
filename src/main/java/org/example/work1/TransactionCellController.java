@@ -1,9 +1,12 @@
 package org.example.work1;
 
-
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+
+import javax.swing.*;
 
 public class TransactionCellController {
 
@@ -14,16 +17,9 @@ public class TransactionCellController {
     private FontAwesomeIconView bwd;
 
     @FXML
-    private Label date_lbl;
+    private Label date_lbl,amount_lbl,type_lbl,description_lbl,name_lbl;
 
-    @FXML
-    private Label amount_lbl;
 
-    @FXML
-    private Label type_lbl;
-
-    @FXML
-    private Label name_lbl ;
 
 
     public void setTransactionData(Transaction transaction){

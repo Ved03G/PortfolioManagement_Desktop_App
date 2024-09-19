@@ -39,7 +39,7 @@ public class UserProfileController implements Initializable {
     public void loadUserData(int userId) {
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String query = "SELECT username, password, phone_number, address, date_of_birth, user_type, bank_account_number, ifsc_code, email, pan FROM users WHERE user_id = ?";
+            String query = "SELECT username, password, phone_number, address, date_of_birth, user_type, bank_account_number, ifsc_code, email, pan FROM users WHERE userid = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();

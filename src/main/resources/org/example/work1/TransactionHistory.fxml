@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="600.0" maxWidth="900.0" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.TransactionHistoryController">
+<AnchorPane maxHeight="600.0" maxWidth="900.0" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.Transactionview">
    <children>
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container2" stylesheets="@style.css">
          <children>
@@ -29,7 +29,7 @@
       </Pane>
       <ScrollPane layoutX="223.0" layoutY="55.0">
          <content>
-            <ListView prefHeight="526.0" prefWidth="646.0" />
+            <ListView fx:id="transactionListView" prefHeight="526.0" prefWidth="646.0" />
          </content>
       </ScrollPane>
    </children>

@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -15,7 +14,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -57,7 +55,7 @@ public class SellFundController {
 
     // Handle the sell action when the user submits the form
     @FXML
-    public void handleSellAction(ActionEvent event) throws IOException {
+    public void handleSellAction()  {
         String fundName = fundListView.getSelectionModel().getSelectedItem();  // Get the selected fund name
         if (fundName == null) {
             statusLabel.setText("Please select a fund.");
@@ -93,18 +91,34 @@ public class SellFundController {
             e.printStackTrace();
             statusLabel.setText("Error during fund sale.");
         }
-        switchtopage(event);
+        Stage stage = (Stage) statusLabel.getScene().getWindow();
+
+
+
+        stage.close();
+        try {
+            reloadSIPManagementScreen();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    private void reloadSIPManagementScreen() throws IOException {
+        // Load the FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SIPManagement.fxml"));
+
+        Parent newRoot = loader.load();
+        // Get the current stage
+        Stage currentStage = (Stage) statusLabel.getScene().getWindow();
+        if (currentStage != null) {
+            // Create a new Scene and set it to the current stage
+            currentStage.setScene(new Scene(newRoot));
+            currentStage.show(); // Make sure to show the stage
+        } else {
+            System.out.println("Current stage is null");
+        }
     }
 
-    private void switchtopage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SIPManagement.fxml"));
-        root = loader.load();
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("SIPManagement");
-        stage.show();
-    }
 
     // Method to search funds and update ListView
     private void searchFunds(String query) {
@@ -243,5 +257,7 @@ public class SellFundController {
             unitsHeldLabel.setText("Error fetching units held.");
         }
     }
+
+
 }
 

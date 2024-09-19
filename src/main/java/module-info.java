@@ -16,6 +16,7 @@ module org.example.work1 {
     requires java.net.http;
     requires java.desktop;
     requires de.jensd.fx.glyphs.fontawesome;
+    requires com.google.gson;
     opens org.example.work1 to javafx.fxml;
     exports org.example.work1;
 }

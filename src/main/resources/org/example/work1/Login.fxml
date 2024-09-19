@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.LoginController">
    <children>
       <BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #ffffff;">
          <left>
@@ -29,13 +22,13 @@
             </Pane>
          </left>
          <center>
-            <Pane prefHeight="600.0" prefWidth="500.0" BorderPane.alignment="CENTER" stylesheets="@style.css">
+            <Pane prefHeight="600.0" prefWidth="500.0" stylesheets="@style.css" BorderPane.alignment="CENTER">
                <children>
                   <AnchorPane layoutX="68.0" layoutY="35.0" prefHeight="530.0" prefWidth="360.0" styleClass="login-container" stylesheets="@style.css">
                      <children>
                         <TextField fx:id="tfusername" layoutX="54.0" layoutY="170.0" prefHeight="30.0" prefWidth="250.0" promptText="UserName" styleClass="bar" stylesheets="@style.css" />
                         <PasswordField fx:id="tfpass" layoutX="55.0" layoutY="227.0" prefHeight="30.0" prefWidth="250.0" promptText="Password" styleClass="bar" stylesheets="@style.css" />
-                        <Button fx:id="btnLogin" layoutX="225.0" layoutY="341.0" mnemonicParsing="false" onAction="#handleLoginButtonClick" prefHeight="30.0" prefWidth="80.0" stylesheets="@style.css" text="Login" textFill="WHITE">
+                        <Button fx:id="btnLogin" layoutX="225.0" layoutY="341.0" mnemonicParsing="false" onAction="#loadClientDashboard" prefHeight="30.0" prefWidth="80.0" stylesheets="@style.css" text="Login" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

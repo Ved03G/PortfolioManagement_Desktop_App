@@ -69,9 +69,9 @@ public class PortfolioManagementController {
         // Load the data from database
         loadTableData();
     }
-    private int getCurrentUserId() {
-        return UserSession.getInstance().getUserId();
-    }
+//    private int getCurrentUserId() {
+//        return UserSession.getInstance().getUserId();
+//    }
     public void loadPortfolioData(int userId) {
         try {
             Connection connection = DatabaseConnection.getConnection();
@@ -182,7 +182,8 @@ public class PortfolioManagementController {
 
             // Set the items for the TableView
             investmentTable.setItems(mutualFundsList);
-            int userId = getCurrentUserId();
+//            int userId = getCurrentUserId();
+            int userId=1;
             loadPortfolioData(userId);
             // Close resources
             resultSet.close();

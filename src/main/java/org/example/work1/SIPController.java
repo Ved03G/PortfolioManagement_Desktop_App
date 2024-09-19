@@ -8,12 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Label;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -28,6 +30,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.stage.Stage;
 
 public class SIPController {
 
@@ -181,6 +184,8 @@ public class SIPController {
             storeSIPDetails(selectedFund, sipAmount, totalUnits, startDate, endDate, frequency,category,fundType,schemeName);
             storetransactiondata( sipAmount, totalUnits,schemeName);
 
+
+
         } catch (NumberFormatException e) {
             System.out.println("Invalid SIP amount entered.");
             navLabel.setText("Invalid SIP amount.");
@@ -193,7 +198,31 @@ public class SIPController {
             System.out.println("Error during SIP investment: " + e.getMessage());
             navLabel.setText("Error during SIP investment.");
         }
+        Stage stage = (Stage) navLabel.getScene().getWindow();
+
+        stage.close();
+        try {
+            reloadSIPManagementScreen();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+    private void reloadSIPManagementScreen() throws IOException {
+        // Load the FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SIPManagement.fxml"));
+
+        Parent newRoot = loader.load();
+        // Get the current stage
+        Stage currentStage = (Stage) sipAmountField.getScene().getWindow();
+        if (currentStage != null) {
+            // Create a new Scene and set it to the current stage
+            currentStage.setScene(new Scene(newRoot));
+            currentStage.show(); // Make sure to show the stage
+        } else {
+            System.out.println("Current stage is null");
+        }
+    }
+
     private MutualFund parseFundDetails(String jsonResponse) {
         JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
         JsonObject metaObject = jsonObject.getAsJsonObject("meta");
