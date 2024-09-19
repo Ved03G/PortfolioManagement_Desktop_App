@@ -12,6 +12,9 @@ module org.example.work1 {
     requires com.almasb.fxgl.all;
     requires java.sql;
     requires json.simple;
+    requires com.fasterxml.jackson.databind;
+    requires java.net.http;
+    requires java.desktop;
 
     opens org.example.work1 to javafx.fxml;
     exports org.example.work1;

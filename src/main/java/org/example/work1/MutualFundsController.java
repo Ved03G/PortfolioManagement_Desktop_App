@@ -63,6 +63,7 @@ public class MutualFundsController {
     private ObservableList<MutualFund> mutualFundData = FXCollections.observableArrayList();
     private MutualFund selectedFund;
     private double currentNav = 0.0;
+    private double costperunit = 0.0;
 
     // Initialize method to load data into the table and handle sidebar
     @FXML
@@ -200,7 +201,7 @@ public class MutualFundsController {
                 JSONObject data = (JSONObject) ((JSONArray) fundData.get("data")).get(0);
                 String date = (String) data.get("date");
                 currentNav = Double.parseDouble((String) data.get("nav")); // Save NAV for later calculations
-
+                costperunit = currentNav;
                 // Show the fetched NAV and date to the user (e.g., in an alert)
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("NAV Data");
@@ -245,7 +246,7 @@ public class MutualFundsController {
                     units = Math.round(units * 100.0) / 100.0; // Round to 2 decimal places
                     double currentValue = units * currentNav;
                     // Save investment details to the database
-                    saveInvestmentToDatabase(amount, units, currentValue);
+                    saveInvestmentToDatabase(amount, units, currentValue,costperunit);
                     // Show investment information
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Investment Successful");
@@ -275,11 +276,11 @@ public class MutualFundsController {
         }
     }
     // Function to save investment details to the database
-    private void saveInvestmentToDatabase(double amountInvested, double units, double currentValue) {
+    private void saveInvestmentToDatabase(double amountInvested, double units, double currentValue, double costperunit) {
         try {
             Connection conn = DatabaseConnection.getConnection();
-            String insertQuery = "INSERT INTO mutual_funds (user_id, fund_name, amount_invested, current_value, investment_date, scheme_code, nav, units) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO mutual_funds (user_id, fund_name, amount_invested, current_value, investment_date, scheme_code, nav, units, costperunit) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(insertQuery);
 
             // Assuming you have a method to get the current user ID
@@ -294,6 +295,7 @@ public class MutualFundsController {
             ps.setString(6, selectedFund.getSchemeCode());  // scheme_code
             ps.setDouble(7, currentNav);// nav
             ps.setDouble(8, units);
+            ps.setDouble(9, costperunit);
 
             ps.executeUpdate();
 

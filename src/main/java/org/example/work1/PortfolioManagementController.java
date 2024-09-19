@@ -75,22 +75,20 @@ public class PortfolioManagementController {
     public void loadPortfolioData(int userId) {
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String query = "SELECT amount_invested, current_value FROM portfolio WHERE user_id = ?";
+            String query = "SELECT amount_invested, current_value FROM portfolio WHERE user_id = ? ORDER BY portfolio_id DESC LIMIT 1";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, userId);
             calculateGains();
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                // Set the values in the TextAreas
+                // Fetch and format values
                 double amountInvested = resultSet.getDouble("amount_invested");
                 double currentValue = resultSet.getDouble("current_value");
 
-// Format to 4 decimal places
                 String formattedCurrentValue = String.format("%.4f", currentValue);
-
-// If you want to use the value elsewhere as a double
                 double roundedCurrentValue = Double.parseDouble(formattedCurrentValue);
 
+                // Set values in the TextAreas
                 amountInvestedTextArea.setText(String.valueOf(amountInvested));
                 currentValueTextArea.setText(String.valueOf(roundedCurrentValue));
             }
@@ -103,9 +101,12 @@ public class PortfolioManagementController {
             e.printStackTrace();
         }
     }
+
     public void calculateGains() {
         double totalGain = 0.0;
         double unrealizedGain = 0.0;
+        double totalAmountInvested = 0.0; // To calculate total gain percentage
+        int rowCount = 0;
 
         try {
             // Fetch data from mutual_funds
@@ -114,36 +115,43 @@ public class PortfolioManagementController {
             String query = "SELECT amount_invested, current_value, nav, costperunit FROM mutual_funds";
             ResultSet resultSet = statement.executeQuery(query);
 
-            int rowCount = 0;
             while (resultSet.next()) {
                 double amountInvested = resultSet.getDouble("amount_invested");
                 double currentValue = resultSet.getDouble("current_value");
                 float nav = resultSet.getFloat("nav");
                 double costperunit = resultSet.getDouble("costperunit");
-                totalGain += (currentValue - amountInvested);  // Gain calculation
+
+                // Calculate total gain
+                totalGain += (currentValue - amountInvested);
+                totalAmountInvested += amountInvested;  // Accumulate amount invested
+
+                // Calculate NAV gain percentage
                 if (costperunit != 0) {
                     double navGainPercentage = ((nav - costperunit) / costperunit) * 100;
                     unrealizedGain += navGainPercentage;
                 } else {
-                    // Handle cases where initial_nav_per_unit is zero
-                    // You might want to log this or handle it differently based on your use case
-                    System.err.println("Initial NAV per Unit is zero, skipping NAV Gain calculation for this record.");
+                    System.err.println("Cost per unit is zero, skipping NAV Gain calculation for this record.");
                 }
 
-                rowCount = 0;
                 rowCount++;
             }
 
-
             resultSet.close();
 
-            // Update the labels
-            totalGainLabel.setText(String.format(" %.2f%%", totalGain));  // Display total gain
-            if (rowCount > 0) {
-                unrealizedGainLabel.setText(String.format("%.2f%%", unrealizedGain / rowCount));  // Display average NAV gain percentage
+            // Update total gain percentage
+            if (totalAmountInvested != 0) {
+                double totalGainPercentage = (totalGain / totalAmountInvested) * 100;
+                totalGainLabel.setText(String.format("%.5f%%", totalGainPercentage));
             } else {
-                unrealizedGainLabel.setText("N/A");  // No data to display
-            }  // Display unrealized gain
+                totalGainLabel.setText("N/A");
+            }
+
+            // Update unrealized gain percentage
+            if (rowCount > 0) {
+                unrealizedGainLabel.setText(String.format(" %.2f%%", unrealizedGain / rowCount));
+            } else {
+                unrealizedGainLabel.setText("N/A");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();

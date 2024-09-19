@@ -102,8 +102,8 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="totalGainLabel" layoutX="107.0" layoutY="42.0" prefHeight="40.0" prefWidth="52.0" styleClass="buttonL" />
-                  <Label fx:id="unrealizedGainLabel" layoutX="107.0" layoutY="118.0" prefHeight="40.0" prefWidth="52.0" styleClass="buttonL2" />
+                  <Label fx:id="totalGainLabel" layoutX="87.0" layoutY="42.0" prefHeight="40.0" prefWidth="72.0" styleClass="buttonL" />
+                  <Label fx:id="unrealizedGainLabel" layoutX="87.0" layoutY="118.0" prefHeight="40.0" prefWidth="72.0" styleClass="buttonL2" />
                </children>
             </Pane>
             <Label layoutX="25.0" layoutY="13.0" prefHeight="40.0" prefWidth="72.0" styleClass="buttonL3" text="    TODAY">

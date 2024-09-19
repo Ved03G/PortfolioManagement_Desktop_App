@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="177.0" prefWidth="663.0" styleClass="cell_container" stylesheets="@sipdatacell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.SipDataCellController">
+   <children>
+      <Label fx:id="sipNameLabel" layoutX="23.0" layoutY="5.0" prefHeight="18.0" prefWidth="339.0" styleClass="trans_pAddress_lbl1" text="Sip Name" />
+      <Label layoutX="23.0" layoutY="45.0" styleClass="trans_date_lbl" text="Frequency:" />
+      <Label fx:id="frequencyLabel" layoutX="23.0" layoutY="66.0" prefHeight="18.0" prefWidth="145.0" styleClass="trans_pAddress_lbl" text="monthly,quaterly,yearly" />
+      <Label layoutX="23.0" layoutY="104.0" styleClass="trans_date_lbl" text="Period" />
+      <Label fx:id="periodLabel" layoutX="23.0" layoutY="129.0" styleClass="trans_pAddress_lbl" text="startdate to enddate" />
+      <Label layoutX="268.0" layoutY="46.0" styleClass="trans_date_lbl" text="Invested amount" />
+      <Label fx:id="investedAmountLabel" layoutX="276.0" layoutY="67.0" styleClass="trans_pAddress_lbl" text="Amount" />
+      <Label layoutX="276.0" layoutY="105.0" styleClass="trans_date_lbl" text="Total Units Purchased" />
+      <Label fx:id="totalUnitsLabel" layoutX="286.0" layoutY="130.0" styleClass="trans_pAddress_lbl" text="units" />
+      <Label layoutX="456.0" layoutY="46.0" styleClass="trans_date_lbl" text="Current Amount" />
+      <Label fx:id="currentAmountLabel" layoutX="453.0" layoutY="61.0" prefHeight="30.0" prefWidth="101.0" styleClass="trans_pAddress_lbl" text="current Amount" />
+      <Label layoutX="456.0" layoutY="105.0" styleClass="trans_date_lbl" text="Returns" />
+      <Label fx:id="returnsLabel" layoutX="453.0" layoutY="129.0" styleClass="trans_pAddress_lbl" text="returns amount" />
+      <Button layoutX="591.0" layoutY="49.0" mnemonicParsing="false" styleClass="button2" text="Button" AnchorPane.topAnchor="49.0" />
+      <Button layoutX="592.0" layoutY="111.0" mnemonicParsing="false" styleClass="button1" text="Button" />
+   </children>
+</AnchorPane>
