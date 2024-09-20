@@ -1,0 +1,21 @@
+
+.button1{
+    -fx-background-color: red;
+    -fx-effect: dropshadow(three-pass-box, #a5a3a3, 5, 0, 0, 7);
+    -fx-font-weight: bold;
+}
+.button1:hover{
+    -fx-background-color: #910101;
+    -fx-text-fill: white;
+}
+
+.button2{
+    -fx-background-color: #01ea01;
+    -fx-effect: dropshadow(three-pass-box, #a5a3a3, 5, 0, 0, 7);
+    -fx-font-weight: bold;
+
+}
+.button2:hover{
+    -fx-background-color: #0b7100;
+    -fx-text-fill: white;
+}

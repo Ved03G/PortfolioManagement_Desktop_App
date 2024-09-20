@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="619.0" styleClass="cell_container" stylesheets="@transactioncell.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.TransactionCellController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="619.0" styleClass="cell_container" stylesheets="@transactioncell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.TransactionCellController">
    <children>
       <VBox alignment="CENTER" layoutX="-3.0" layoutY="2.0" prefHeight="75.0" prefWidth="70.0">
          <children>
@@ -12,9 +13,9 @@
             <FontAwesomeIconView fx:id="bwd" glyphName="ARROW_LEFT" size="20" styleClass="icon2" wrappingWidth="17.300029516220093" />
          </children>
       </VBox>
-      <Label fx:id="date_lbl" layoutX="109.0" layoutY="28.0" styleClass="trans_date_lbl" text="Date" />
-      <Label fx:id="type_lbl" layoutX="186.0" layoutY="28.0" styleClass="trans_pAddress_lbl" text="sip/MF" />
-      <Label fx:id="name_lbl" layoutX="258.0" layoutY="8.0" prefHeight="58.0" prefWidth="268.0" styleClass="trans_pAddress_lbl" text="name" />
-      <Label fx:id="amount_lbl" layoutX="535.0" layoutY="16.0" prefHeight="42.0" prefWidth="70.0" styleClass="trans_amount_lbl" text="amount" />
+      <Label fx:id="date_lbl" layoutX="92.0" layoutY="27.0" styleClass="trans_date_lbl" text="Date" />
+      <Label fx:id="type_lbl" layoutX="199.0" layoutY="27.0" styleClass="trans_pAddress_lbl" text="sip/MF" />
+      <Label fx:id="name_lbl" layoutX="262.0" layoutY="26.0" prefHeight="20.0" prefWidth="236.0" styleClass="trans_pAddress_lbl" text="name" />
+      <Label fx:id="amount_lbl" layoutX="521.0" layoutY="16.0" prefHeight="42.0" prefWidth="84.0" styleClass="trans_amount_lbl" text="amount" />
    </children>
 </AnchorPane>
