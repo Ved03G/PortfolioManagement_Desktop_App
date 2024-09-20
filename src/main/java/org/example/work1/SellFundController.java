@@ -94,8 +94,8 @@ public class SellFundController {
         Stage stage = (Stage) statusLabel.getScene().getWindow();
 
 
+//        stage.close();
 
-        stage.close();
         try {
             reloadSIPManagementScreen();
         } catch (IOException e) {
