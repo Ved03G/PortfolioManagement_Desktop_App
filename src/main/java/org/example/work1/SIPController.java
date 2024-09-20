@@ -1,3 +1,4 @@
+
 package org.example.work1;
 
 
@@ -200,12 +201,14 @@ public class SIPController {
         }
         Stage stage = (Stage) navLabel.getScene().getWindow();
 
-        stage.close();
+
         try {
             reloadSIPManagementScreen();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+//        stage.close();
+
     }
     private void reloadSIPManagementScreen() throws IOException {
         // Load the FXML file
@@ -349,4 +352,3 @@ public class SIPController {
         }
     }
 }
-

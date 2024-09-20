@@ -1,4 +1,5 @@
 
+
 package org.example.work1;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -94,8 +95,8 @@ public class SellFundController {
         Stage stage = (Stage) statusLabel.getScene().getWindow();
 
 
+//        stage.close();
 
-        stage.close();
         try {
             reloadSIPManagementScreen();
         } catch (IOException e) {
@@ -260,4 +261,3 @@ public class SellFundController {
 
 
 }
-
