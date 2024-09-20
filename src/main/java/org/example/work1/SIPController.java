@@ -153,7 +153,7 @@ public class SIPController {
 
         try {
             double sipAmount = Double.parseDouble(sipAmountText);
-            String fundId = selectedFund.getFundId();
+            String fundId = selectedFund.getsipid();
 
             String fundDataUrl = "https://api.mfapi.in/mf/" + fundId;
             HttpRequest request = HttpRequest.newBuilder()
@@ -178,11 +178,9 @@ public class SIPController {
             totalUnitsLabel.setText(String.format("Total Units: %.2f", totalUnits));
 
             MutualFund fund = parseFundDetails(jsonResponse);
-            String category= fund.getCategory();
-            String fundType = fund.getFundType();
             String schemeName = fund.getSchemeName();
 
-            storeSIPDetails(selectedFund, sipAmount, totalUnits, startDate, endDate, frequency,category,fundType,schemeName);
+            storeSIPDetails(selectedFund ,sipAmount, totalUnits, startDate, endDate, frequency,schemeName);
             storetransactiondata( sipAmount, totalUnits,schemeName);
 
 
@@ -254,14 +252,14 @@ public class SIPController {
         return null;
     }
     public class MutualFund {
-        private String fundId;
+        private String sipid;
         private String schemeName;
         private String fundType;
         private String category;
         private String nav;
 
-        public MutualFund(String fundId, String schemeName, String fundType, String category, String nav) {
-            this.fundId = fundId;
+        public MutualFund(String sipid, String schemeName, String fundType, String category, String nav) {
+            this.sipid = sipid;
             this.schemeName = schemeName;
             this.fundType = fundType;
             this.category = category;
@@ -271,8 +269,8 @@ public class SIPController {
 
 
         // Getters
-        public String getFundId() {
-            return fundId;
+        public String getsipid() {
+            return sipid;
         }
 
         public String getSchemeName() {
@@ -288,34 +286,23 @@ public class SIPController {
         public String toString() {
             return schemeName;
         }
-        public String getFundType() {
-            return fundType;
-        }
-        public String getCategory() {
-            return category;
-        }
 
     }
-    private void storeSIPDetails(MutualFund fund, double sipAmount, double totalUnits, LocalDate startDate, LocalDate endDate, String frequency,String category, String fundType, String schemeName) {
-        String url = "jdbc:mysql://localhost:3306/mutualfundsdb";
-        String user = "root";
-        String password = "Servesh#21";
+    private void storeSIPDetails(MutualFund fund, double sipAmount, double totalUnits, LocalDate startDate, LocalDate endDate, String frequency, String fund_Name) {
+        String URL = "jdbc:mysql://127.0.0.1:3306/javafxapp" ; // Update as necessary
+        String USER = "root"; // Your MySQL username
+        String PASSWORD = "Vedant@98"; // Your MySQL password
+        String insertSQL = "INSERT INTO sip (fund_id,sip_amount, total_units, start_date, end_date, frequency,fund_Name) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        String insertSQL = "INSERT INTO sip (fund_id, sip_amount, total_units, start_date, end_date, frequency,fund_Name,fund_type,fund_category) VALUES (?, ?, ?, ?, ?, ?,?,?,?)";
-
-        try (Connection conn = DriverManager.getConnection(url, user, password);
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
-
-            stmt.setString(1, fund.getFundId());
+            stmt.setString(1, fund.getsipid());
             stmt.setDouble(2, sipAmount);
             stmt.setDouble(3, totalUnits);
             stmt.setDate(4, java.sql.Date.valueOf(startDate));
             stmt.setDate(5, java.sql.Date.valueOf(endDate));
             stmt.setString(6, frequency);
-            stmt.setString(7, schemeName);
-            stmt.setString(8, fundType);
-            stmt.setString(9, category);
-
+            stmt.setString(7, fund_Name);
 
             stmt.executeUpdate();
             System.out.println("SIP data successfully stored in the database.");
@@ -326,13 +313,13 @@ public class SIPController {
         }
     }
     private void storetransactiondata(double sipAmount,double totalUnits,String schemename) {
-        String url = "jdbc:mysql://localhost:3306/mutualfundsdb";
-        String user = "root";
-        String password = "Servesh#21";
+        String URL = "jdbc:mysql://127.0.0.1:3306/javafxapp" ; // Update as necessary
+        String USER = "root"; // Your MySQL username
+        String PASSWORD = "Vedant@98"; // Your MySQL password
 
-        String insertSQL = "INSERT INTO transactions ( Amount, units, type, transaction_date, fund_name,fundtype) VALUES ( ?, ?, ?, ?, ?,?)";
+        String insertSQL = "INSERT INTO transactions ( Amount, units, type1, transaction_date, fund_name,fund_type) VALUES ( ?, ?, ?, ?, ?,?)";
 
-        try (Connection conn = DriverManager.getConnection(url, user, password);
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
 
 

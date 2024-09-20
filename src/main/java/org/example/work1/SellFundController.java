@@ -39,9 +39,7 @@ public class SellFundController {
     private Scene scene;
     private Parent root;
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/mutualfundsdb";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Servesh#21";
+
 
     // Initialize the controller
     @FXML
@@ -129,8 +127,8 @@ public class SellFundController {
             return;
         }
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement("SELECT fund_name FROM sip WHERE fund_name LIKE ?")) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT fund_Name FROM sip WHERE fund_Name LIKE ?")) {
             stmt.setString(1, "%" + query + "%");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -145,8 +143,8 @@ public class SellFundController {
 
     // Fetch the current units for the selected fund from the portfolio
     private double getCurrentUnitsForFund(String fundName) throws SQLException {
-        String query = "SELECT total_units, sip_amount FROM sip WHERE fund_name = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        String query = "SELECT total_units, sip_amount FROM sip WHERE fund_Name = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, fundName);
             ResultSet rs = stmt.executeQuery();
@@ -194,22 +192,22 @@ public class SellFundController {
     // Update the portfolio after selling the units
     private void updatePortfolioAfterSale(String fundName, double unitsToSell, double saleAmount) throws SQLException {
         String updateSQL = "UPDATE sip SET total_units = total_units - ?, sip.sip_amount = sip_amount - ? WHERE fund_name = ? AND total_units >= ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(updateSQL)) {
             stmt.setDouble(1, unitsToSell);
             stmt.setDouble(2, (unitsToSell * getCurrentNavForFund(fundName))); // Reduce invested amount
             stmt.setString(3, fundName);
             stmt.setDouble(4, unitsToSell);
 
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected == 0) {
+            double rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0.00000000000) {
                 throw new SQLException("Not enough units to sell.");
             }
         }
 
         // Optionally, remove the fund from portfolio if units become 0
         String deleteSQL = "DELETE FROM sip WHERE total_units = 0 AND fund_name = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(deleteSQL)) {
             stmt.setString(1, fundName);
             stmt.executeUpdate();
@@ -218,8 +216,8 @@ public class SellFundController {
 
     // Store the sale transaction in the database
     private void storeSaleTransaction(double saleAmount, double unitsSold, String fundName) throws SQLException {
-        String insertSQL = "INSERT INTO transactions (amount, units, type, transaction_date, fund_name) VALUES (?, ?, 'Sell', ?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        String insertSQL = "INSERT INTO transactions (amount, units, type1, transaction_date, fund_name,fund_type) VALUES (?, ?, 'Sell', ?, ?,'SIP')";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
 
             stmt.setDouble(1, saleAmount);
@@ -234,7 +232,7 @@ public class SellFundController {
     // Placeholder method to get fund ID from fund name
     private String getFundIdFromName(String fundName) {
         String query = "SELECT fund_id FROM sip WHERE fund_name = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, fundName);
             ResultSet rs = stmt.executeQuery();

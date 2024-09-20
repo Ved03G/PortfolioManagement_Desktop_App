@@ -65,13 +65,12 @@ public class PortfolioManagementController {
         currentValueColumn.setCellValueFactory(new PropertyValueFactory<>("currentValue"));
         costperunitColumn.setCellValueFactory(new PropertyValueFactory<>("costPerUnit"));
         unitsColumn.setCellValueFactory(new PropertyValueFactory<>("units"));
-
         // Load the data from database
         loadTableData();
     }
-//    private int getCurrentUserId() {
-//        return UserSession.getInstance().getUserId();
-//    }
+    private int getCurrentUserId() {
+        return UserSession.getInstance().getUserId();
+    }
     public void loadPortfolioData(int userId) {
         try {
             Connection connection = DatabaseConnection.getConnection();
@@ -182,8 +181,7 @@ public class PortfolioManagementController {
 
             // Set the items for the TableView
             investmentTable.setItems(mutualFundsList);
-//            int userId = getCurrentUserId();
-            int userId=1;
+            int userId=getCurrentUserId();
             loadPortfolioData(userId);
             // Close resources
             resultSet.close();

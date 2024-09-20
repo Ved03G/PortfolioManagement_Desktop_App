@@ -160,18 +160,18 @@ public class SIPManagementController {
                 return null;
             }
         });
-
         // Load SIP data from the database
         loadSipData();
 
         // Set up search field listener
         searchField.textProperty().addListener((observable, oldValue, newValue) -> filterSipData(newValue));
     }
-
+    private int getCurrentUserId() {
+        return UserSession.getInstance().getUserId();
+    }
     // Load SIP data from the database
     private void loadSipData() {
         String query = "SELECT fund_Name, frequency, start_date, end_date, sip_amount, total_units FROM sip";
-
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -226,7 +226,7 @@ public class SIPManagementController {
 
     // Fetch fund ID from fund name
     private String getFundIdFromName(String fundName) {
-        String query = "SELECT fund_id FROM sip WHERE fund_name = ?";
+        String query = "SELECT fund_id FROM sip WHERE fund_Name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, fundName);

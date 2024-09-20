@@ -31,9 +31,9 @@ public class Transactionview {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/mutualfundsdb";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Servesh#21";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/javafxapp" ; // Update as necessary
+    private static final String USER = "root"; // Your MySQL username
+    private static final String PASSWORD = "Vedant@98"; // Your MySQL password
     private ObservableList<Transaction> transactionList = FXCollections.observableArrayList();
     @FXML
     private    ListView<Transaction> transactionListView;
@@ -84,17 +84,17 @@ public class Transactionview {
     }
     // Method to load transactions from the database
     public void loadTransactionsFromDatabase() {
-        String query = "SELECT Amount,type, transaction_date, fundtype, units,fund_name FROM transactions";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        String query = "SELECT Amount,type1, transaction_date, fund_type,fund_name,units FROM transactions";
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 String amount = String.valueOf(rs.getDouble("Amount"));
-                String type = rs.getString("type");
+                String type = rs.getString("type1");
                 Date transactionDate;
                 transactionDate = rs.getDate("transaction_date");
-                String fundtype = rs.getString("fundtype");
+                String fundtype = rs.getString("fund_type");
                 String fundname = rs.getString("fund_name");
                 double units = rs.getDouble("units");
 
