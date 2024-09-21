@@ -100,12 +100,15 @@ public class MutualFundsController {
         btnMutualFunds.getStyleClass().add("sidebar-button-active");
     }
     public void loadTableData() {
-        // Load data from the database into TableView
         try {
             Connection connection = DatabaseConnection.getConnection();
             Statement statement = connection.createStatement();
-            String query = "SELECT scheme_code, fund_name, nav, amount_invested, current_value, units, costperunit FROM mutual_funds";
+            int userId = getCurrentUserId(); // Get the current user ID
+
+            String query = "SELECT scheme_code, fund_name, nav, amount_invested, current_value, units, costperunit FROM mutual_funds WHERE user_id = " + userId;
             ResultSet resultSet = statement.executeQuery(query);
+
+            mutualFundsList.clear(); // Clear the list before loading new data
 
             while (resultSet.next()) {
                 String schemeCode = resultSet.getString("scheme_code");
@@ -116,15 +119,12 @@ public class MutualFundsController {
                 double units = resultSet.getDouble("units");
                 double costPerUnit = resultSet.getDouble("costperunit");
 
-                // Add data to the list
                 MutualFund2 mutualFund = new MutualFund2(schemeCode, schemeName, nav, amountInvested, currentValue, units, costPerUnit);
                 mutualFundsList.add(mutualFund);
             }
 
-            // Set the items for the TableView
             investmentTable.setItems(mutualFundsList);
 
-            // Close resources
             resultSet.close();
             statement.close();
             connection.close();
@@ -133,6 +133,7 @@ public class MutualFundsController {
             e.printStackTrace();
         }
     }
+
     // Fetch mutual funds from API and populate the table
     private void loadMutualFunds() {
         MutualFundFetcher fetcher = new MutualFundFetcher();
@@ -283,72 +284,62 @@ public class MutualFundsController {
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(insertQuery);
 
-            // Assuming you have a method to get the current user ID
             int userId = getCurrentUserId();
             updatePortfolio(userId);
-
-            ps.setInt(1, userId);  // user_id
-            ps.setString(2, selectedFund.getSchemeName());  // fund_name
-            ps.setDouble(3, amountInvested);  // amount_invested
-            ps.setDouble(4, currentValue);  // current_value
-            ps.setTimestamp(5, new Timestamp(new Date().getTime()));  // investment_date
-            ps.setString(6, selectedFund.getSchemeCode());  // scheme_code
-            ps.setDouble(7, currentNav);// nav
+            ps.setInt(1, userId);
+            ps.setString(2, selectedFund.getSchemeName());
+            ps.setDouble(3, amountInvested);
+            ps.setDouble(4, currentValue);
+            ps.setTimestamp(5, new Timestamp(new Date().getTime()));
+            ps.setString(6, selectedFund.getSchemeCode());
+            ps.setDouble(7, currentNav);
             ps.setDouble(8, units);
             ps.setDouble(9, costperunit);
 
             ps.executeUpdate();
+            ps.close();
+            conn.close();
 
-            System.out.println("Investment details saved to the database.");
         } catch (SQLException e) {
-            System.err.println("SQL Error:");
-            System.err.println("Message: " + e.getMessage());
-            System.err.println("SQL State: " + e.getSQLState());
-            System.err.println("Error Code: " + e.getErrorCode());
             e.printStackTrace();
         }
     }
+
     private int getCurrentUserId() {
         return UserSession.getInstance().getUserId();
     }
     public void updatePortfolio(int userId) {
         try {
             Connection connection = DatabaseConnection.getConnection();
-            Statement statement = connection.createStatement();
-
-            // Query to calculate the sum of amount_invested and current_value
-            String sumQuery = "SELECT SUM(amount_invested) AS totalAmountInvested, SUM(current_value) AS totalCurrentValue FROM mutual_funds";
-            ResultSet resultSet = statement.executeQuery(sumQuery);
+            String sumQuery = "SELECT SUM(amount_invested) AS totalAmountInvested, SUM(current_value) AS totalCurrentValue " +
+                    "FROM mutual_funds WHERE user_id = ?";
+            PreparedStatement ps = connection.prepareStatement(sumQuery);
+            ps.setInt(1, userId);
+            ResultSet resultSet = ps.executeQuery();
 
             if (resultSet.next()) {
                 double totalAmountInvested = resultSet.getDouble("totalAmountInvested");
                 double totalCurrentValue = resultSet.getDouble("totalCurrentValue");
 
-                // Insert the calculated data into the portfolio table
                 String insertQuery = "INSERT INTO portfolio (user_id, amount_invested, current_value) VALUES (?, ?, ?)";
-                PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-                preparedStatement.setInt(1, userId);
-                preparedStatement.setDouble(2, totalAmountInvested);
-                preparedStatement.setDouble(3, totalCurrentValue);
+                PreparedStatement insertPs = connection.prepareStatement(insertQuery);
+                insertPs.setInt(1, userId);
+                insertPs.setDouble(2, totalAmountInvested);
+                insertPs.setDouble(3, totalCurrentValue);
 
-                // Execute the insertion
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
+                insertPs.executeUpdate();
+                insertPs.close();
             }
 
-            // Close resources
             resultSet.close();
-            statement.close();
+            ps.close();
             connection.close();
 
         } catch (SQLException e) {
-            System.err.println("SQL Error:");
-            System.err.println("Message: " + e.getMessage());
-            System.err.println("SQL State: " + e.getSQLState());
-            System.err.println("Error Code: " + e.getErrorCode());
             e.printStackTrace();
         }
     }
+
 
     // Method to handle the selling of a fund
     @FXML

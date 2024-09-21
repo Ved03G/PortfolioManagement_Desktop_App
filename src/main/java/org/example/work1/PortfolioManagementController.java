@@ -42,7 +42,7 @@ public class PortfolioManagementController {
     @FXML
     private TextArea currentValueTextArea;
     @FXML
-    private Label totalGainLabel;  // For label with styleClass "buttonL"
+    private Label totalGainLabel;
     @FXML
     private Label unrealizedGainLabel;
     private Stage stage;
@@ -54,10 +54,7 @@ public class PortfolioManagementController {
     public void initialize() {
         if (schemeCodeColumn != null) {
             schemeCodeColumn.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
-        } else {
-            System.out.println("Error: schemeCodeColumn is null");
         }
-        // Initialize table columns
         schemeCodeColumn.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
         schemeNameColumn.setCellValueFactory(new PropertyValueFactory<>("schemeName"));
         navColumn.setCellValueFactory(new PropertyValueFactory<>("nav"));
@@ -65,12 +62,14 @@ public class PortfolioManagementController {
         currentValueColumn.setCellValueFactory(new PropertyValueFactory<>("currentValue"));
         costperunitColumn.setCellValueFactory(new PropertyValueFactory<>("costPerUnit"));
         unitsColumn.setCellValueFactory(new PropertyValueFactory<>("units"));
-        // Load the data from database
+
         loadTableData();
     }
+
     private int getCurrentUserId() {
         return UserSession.getInstance().getUserId();
     }
+
     public void loadPortfolioData(int userId) {
         try {
             Connection connection = DatabaseConnection.getConnection();
@@ -80,22 +79,18 @@ public class PortfolioManagementController {
             calculateGains();
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                // Fetch and format values
                 double amountInvested = resultSet.getDouble("amount_invested");
                 double currentValue = resultSet.getDouble("current_value");
 
                 String formattedCurrentValue = String.format("%.4f", currentValue);
                 double roundedCurrentValue = Double.parseDouble(formattedCurrentValue);
 
-                // Set values in the TextAreas
                 amountInvestedTextArea.setText(String.valueOf(amountInvested));
                 currentValueTextArea.setText(String.valueOf(roundedCurrentValue));
             }
-
             resultSet.close();
             preparedStatement.close();
             connection.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -104,14 +99,13 @@ public class PortfolioManagementController {
     public void calculateGains() {
         double totalGain = 0.0;
         double unrealizedGain = 0.0;
-        double totalAmountInvested = 0.0; // To calculate total gain percentage
+        double totalAmountInvested = 0.0;
         int rowCount = 0;
 
         try {
-            // Fetch data from mutual_funds
             Connection connection = DatabaseConnection.getConnection();
             Statement statement = connection.createStatement();
-            String query = "SELECT amount_invested, current_value, nav, costperunit FROM mutual_funds";
+            String query = "SELECT amount_invested, current_value, nav, costperunit FROM mutual_funds WHERE user_id = " + getCurrentUserId();
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
@@ -120,16 +114,12 @@ public class PortfolioManagementController {
                 float nav = resultSet.getFloat("nav");
                 double costperunit = resultSet.getDouble("costperunit");
 
-                // Calculate total gain
                 totalGain += (currentValue - amountInvested);
-                totalAmountInvested += amountInvested;  // Accumulate amount invested
+                totalAmountInvested += amountInvested;
 
-                // Calculate NAV gain percentage
                 if (costperunit != 0) {
                     double navGainPercentage = ((nav - costperunit) / costperunit) * 100;
                     unrealizedGain += navGainPercentage;
-                } else {
-                    System.err.println("Cost per unit is zero, skipping NAV Gain calculation for this record.");
                 }
 
                 rowCount++;
@@ -137,7 +127,6 @@ public class PortfolioManagementController {
 
             resultSet.close();
 
-            // Update total gain percentage
             if (totalAmountInvested != 0) {
                 double totalGainPercentage = (totalGain / totalAmountInvested) * 100;
                 totalGainLabel.setText(String.format("%.5f%%", totalGainPercentage));
@@ -145,7 +134,6 @@ public class PortfolioManagementController {
                 totalGainLabel.setText("N/A");
             }
 
-            // Update unrealized gain percentage
             if (rowCount > 0) {
                 unrealizedGainLabel.setText(String.format(" %.2f%%", unrealizedGain / rowCount));
             } else {
@@ -158,12 +146,12 @@ public class PortfolioManagementController {
     }
 
     public void loadTableData() {
-        // Load data from the database into TableView
         try {
             Connection connection = DatabaseConnection.getConnection();
-            Statement statement = connection.createStatement();
-            String query = "SELECT scheme_code, fund_name, nav, amount_invested, current_value, units, costperunit FROM mutual_funds";
-            ResultSet resultSet = statement.executeQuery(query);
+            String query = "SELECT scheme_code, fund_name, nav, amount_invested, current_value, units, costperunit FROM mutual_funds WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, getCurrentUserId());
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 String schemeCode = resultSet.getString("scheme_code");
@@ -174,30 +162,22 @@ public class PortfolioManagementController {
                 double units = resultSet.getDouble("units");
                 double costPerUnit = resultSet.getDouble("costperunit");
 
-                // Add data to the list
                 MutualFund2 mutualFund = new MutualFund2(schemeCode, schemeName, nav, amountInvested, currentValue, units, costPerUnit);
                 mutualFundsList.add(mutualFund);
             }
 
-            // Set the items for the TableView
             investmentTable.setItems(mutualFundsList);
-            int userId=getCurrentUserId();
+            int userId = getCurrentUserId();
             loadPortfolioData(userId);
-            // Close resources
-            resultSet.close();
-            statement.close();
-            connection.close();
 
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
         } catch (SQLException e) {
-            System.err.println("SQL Error:");
-            System.err.println("Message: " + e.getMessage());
-            System.err.println("SQL State: " + e.getSQLState());
-            System.err.println("Error Code: " + e.getErrorCode());
             e.printStackTrace();
         }
     }
 
-    // Method to load the FXML of each section
     private void switchToPage(ActionEvent event, String fxmlFile, String title) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         root = loader.load();
