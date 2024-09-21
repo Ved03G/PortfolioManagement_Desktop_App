@@ -16,8 +16,10 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.jar.Attributes;
 
 public class MutualFundsController {
 
@@ -248,6 +250,7 @@ public class MutualFundsController {
                     double currentValue = units * currentNav;
                     // Save investment details to the database
                     saveInvestmentToDatabase(amount, units, currentValue,costperunit);
+                    savetotransactions( amount, units,selectedFund.getSchemeName(),"BUY");
                     // Show investment information
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Investment Successful");
@@ -303,7 +306,32 @@ public class MutualFundsController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
+    private void savetotransactions(double AmountInvested, double units, String Name,String type){
+        String insertSQL = "INSERT INTO transactions ( Amount, units, type1, transaction_date, fund_name,fund_type) VALUES ( ?, ?, ?, ?, ?,?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
+
+
+            stmt.setDouble(1, AmountInvested);
+            stmt.setDouble(2, units);
+            stmt.setString(3, type);
+            stmt.setString(4, String.valueOf(java.sql.Date.valueOf(LocalDate.now())));
+            stmt.setString(5, Name);
+            stmt.setString(6, "Mutual Fund");
+
+            stmt.executeUpdate();
+            System.out.println("SIP data successfully stored in the database.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error storing SIP data: " + e.getMessage());
+        }
+    }
+
+
 
     private int getCurrentUserId() {
         return UserSession.getInstance().getUserId();
@@ -348,53 +376,74 @@ public class MutualFundsController {
 
         if (selectedfund != null) {
             // Confirm with the user before deleting
-            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setTitle("Sell Fund");
-            confirmation.setHeaderText("Sell Fund: " + selectedfund.getSchemeName());
-            confirmation.setContentText("Are you sure you want to sell this fund?");
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Sell Fund");
+            dialog.setHeaderText("Sell Fund: " + selectedfund.getSchemeName());
+            dialog.setHeaderText("Total Units Available: " + selectedfund.getUnits());
+            dialog.setContentText("Enter the Units You Want To sell");
 
-            confirmation.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    // Proceed to delete the record from the database
-                    deleteFundFromDatabase(selectedfund);
-
-                    // Remove the fund from the table
-                    investmentTable.getItems().remove(selectedfund);
-
-                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                    successAlert.setTitle("Success");
-                    successAlert.setHeaderText("Fund Sold");
-                    successAlert.setContentText("The mutual fund has been successfully sold.");
-                    successAlert.showAndWait();
+            dialog.showAndWait().ifPresent( unitstr-> {
+                try {
+                    double units = Double.parseDouble(unitstr);
+                    double amount=selectedfund.getAmountInvested();
+                    if (units > selectedfund.getUnits()) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Invalid Input");
+                        alert.setContentText("You Do Not Havr Sufficient Units!");
+                        return;
+                    } else {
+                       double units1 = selectedfund.getUnits() - units;
+                        double nav = selectedfund.getNav();
+                        double amountInvested = units1 * nav;
+                        deleteFundFromDatabase(amountInvested, units1,nav,selectedfund.getSchemeCode());
+                        savetotransactions(amountInvested, units,selectedfund.getSchemeName(),"Sell");
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Success");
+                        alert.setHeaderText("Success");
+                        alert.setContentText("You have successfully Sold  " +units + " for ₹ " +amount + " Remaning Units"+units1 +",remaining Amount" +amountInvested);
+                        alert.showAndWait();
+                    }
+                }catch(NumberFormatException e){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Invalid Input");
+                    alert.setContentText("Please enter a valid number for the amount.");
+                    alert.showAndWait();
                 }
+
             });
-        } else {
-            // Show error if no fund is selected
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("No Mutual Fund Selected");
-            alert.setContentText("Please select a mutual fund to sell.");
-            alert.showAndWait();
-        }
+
+
+    }
     }
 
+
     // Method to delete the selected fund from the database
-    private void deleteFundFromDatabase(MutualFund2 fund) {
+    private void deleteFundFromDatabase(double amount, double units,double nav,String schemecode) {
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String deleteQuery = "DELETE FROM mutual_funds WHERE scheme_code = ?";
+            String deleteQuery = "UPDATE mutual_funds Set units=?,amount_invested=?,current_value=? where scheme_code=?";
             PreparedStatement ps = connection.prepareStatement(deleteQuery);
 
-            ps.setString(1, fund.getSchemeCode());  // Set the scheme code of the selected fund
-
+            ps.setDouble(1, units);// Set the scheme code of the selected fund
+            ps.setDouble(2, amount);
+            ps.setDouble(3, units*nav);
+            ps.setString(4, schemecode);
             ps.executeUpdate();  // Execute the deletion
 
             ps.close();
             connection.close();
-
-            System.out.println("Fund deleted from database.");
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        String deleteQuery = "DELETE FROM mutual_funds WHERE units=?";
+        try(Connection conn=DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(deleteQuery)) {
+            stmt.setInt(1, 0);
+            stmt.executeUpdate();
+    } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
