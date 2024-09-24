@@ -30,6 +30,7 @@ public class TransactionCellController {
             name_lbl.setText(transaction.getFundname());
             if(transaction.getType().equals("Buy")){
                 fwd.setVisible(true);
+
                 bwd.setVisible(false);
             }else{
                 fwd.setVisible(false);

@@ -18,5 +18,7 @@
       <Label fx:id="currentAmountLabel" layoutX="453.0" layoutY="61.0" prefHeight="30.0" prefWidth="101.0" styleClass="trans_pAddress_lbl" text="current Amount" />
       <Label layoutX="456.0" layoutY="105.0" styleClass="trans_date_lbl" text="Returns" />
       <Label fx:id="returnsLabel" layoutX="453.0" layoutY="129.0" styleClass="trans_pAddress_lbl" text="returns amount" />
+      <Button layoutX="589.0" layoutY="55.0" mnemonicParsing="false" text="add more" />
+      <Button layoutX="589.0" layoutY="117.0" mnemonicParsing="false" onAction="#handlesell" text="sell" />
    </children>
 </AnchorPane>

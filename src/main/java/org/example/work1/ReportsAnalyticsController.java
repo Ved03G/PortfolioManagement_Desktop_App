@@ -68,20 +68,20 @@ public class ReportsAnalyticsController {
     }
     @FXML
     public void initialize() {
-        // Initialize PieChart data from the database
-        fetchDataAndPopulatePieChart();
-
-        // Initialize LineChart data
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Series 1");
-        series.getData().add(new XYChart.Data<>("Jan", 23));
-        series.getData().add(new XYChart.Data<>("Feb", 14));
-        series.getData().add(new XYChart.Data<>("Mar", 15));
-        series.getData().add(new XYChart.Data<>("Apr", 24));
-        series.getData().add(new XYChart.Data<>("May", 34));
-        series.getData().add(new XYChart.Data<>("Jun", 36));
-
-        lineChart.getData().add(series);
+//        // Initialize PieChart data from the database
+         fetchDataAndPopulatePieChart();
+//
+//        // Initialize LineChart data
+//        XYChart.Series<String, Number> series = new XYChart.Series<>();
+//        series.setName("Series 1");
+//        series.getData().add(new XYChart.Data<>("Jan", 23));
+//        series.getData().add(new XYChart.Data<>("Feb", 14));
+//        series.getData().add(new XYChart.Data<>("Mar", 15));
+//        series.getData().add(new XYChart.Data<>("Apr", 24));
+//        series.getData().add(new XYChart.Data<>("May", 34));
+//        series.getData().add(new XYChart.Data<>("Jun", 36));
+//
+//        lineChart.getData().add(series);
     }
     private void fetchDataAndPopulatePieChart() {
         Connection connection = null;
@@ -89,19 +89,19 @@ public class ReportsAnalyticsController {
 
         try {
             // Connect to the database (replace with your database credentials)
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/PortfolioDB", "root", "Omkar@16905");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javafxapp", "root", "Servesh#21");
 
             // Create a statement
             statement = connection.createStatement();
 
             // Execute the query to get the type data
-            String query = "SELECT  COUNT(*) AS Count FROM portfolio ";
+            String query = "SELECT  SUM(amount_invested) AS Count FROM portfolio group by type";
             ResultSet resultSet = statement.executeQuery(query);
 
             // Populate the PieChart with data from the result set
             while (resultSet.next()) {
-                String type = resultSet.getString("Type");
-                int count = resultSet.getInt("Count");
+                String type = resultSet.getString("type");
+                double count = resultSet.getInt("Count");
 
                 // Add data to PieChart
                 PieChart.Data slice = new PieChart.Data(type, count);

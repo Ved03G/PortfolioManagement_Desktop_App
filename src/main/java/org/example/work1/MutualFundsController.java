@@ -67,6 +67,12 @@ public class MutualFundsController {
     private double currentNav = 0.0;
     private double costperunit = 0.0;
 
+    private void calculateCurrentValues() {
+        for (MutualFund2 fund : mutualFundsList) {
+            double currentValue = fund.getNav() * fund.getUnits();
+            fund.setCurrentValue(currentValue); // Assuming you have a setter for currentValue
+        }
+    }
     // Initialize method to load data into the table and handle sidebar
     @FXML
     public void initialize() {
@@ -88,10 +94,12 @@ public class MutualFundsController {
         loadTableData();
 
 
+
         columnSchemeCode.setCellValueFactory(new PropertyValueFactory<>("schemeCode"));
         columnSchemeName.setCellValueFactory(new PropertyValueFactory<>("schemeName"));
 
         loadMutualFunds();  // Load data when initializing
+        calculateCurrentValues();
         // Handle table row selection
         mutualFundTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -349,12 +357,12 @@ public class MutualFundsController {
                 double totalAmountInvested = resultSet.getDouble("totalAmountInvested");
                 double totalCurrentValue = resultSet.getDouble("totalCurrentValue");
 
-                String insertQuery = "INSERT INTO portfolio (user_id, amount_invested, current_value) VALUES (?, ?, ?)";
+                String insertQuery = "INSERT INTO portfolio (user_id, amount_invested, current_value,type) VALUES (?, ?, ?,?)";
                 PreparedStatement insertPs = connection.prepareStatement(insertQuery);
                 insertPs.setInt(1, userId);
                 insertPs.setDouble(2, totalAmountInvested);
                 insertPs.setDouble(3, totalCurrentValue);
-
+                insertPs.setString(4, "Mutual Fund");
                 insertPs.executeUpdate();
                 insertPs.close();
             }
@@ -385,7 +393,7 @@ public class MutualFundsController {
             dialog.showAndWait().ifPresent( unitstr-> {
                 try {
                     double units = Double.parseDouble(unitstr);
-                    double amount=selectedfund.getAmountInvested();
+                    double amount=units*selectedfund.getNav();
                     if (units > selectedfund.getUnits()) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");

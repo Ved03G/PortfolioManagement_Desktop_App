@@ -27,9 +27,9 @@
             </ImageView>
          </children>
       </Pane>
-      <ScrollPane layoutX="223.0" layoutY="55.0">
+      <ScrollPane layoutX="212.0" layoutY="44.0">
          <content>
-            <ListView fx:id="transactionListView" prefHeight="526.0" prefWidth="646.0" />
+            <ListView fx:id="transactionListView" prefHeight="545.0" prefWidth="679.0" />
          </content>
       </ScrollPane>
    </children>
