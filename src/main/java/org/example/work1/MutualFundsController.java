@@ -250,7 +250,7 @@ public class MutualFundsController {
                     double currentValue = units * currentNav;
                     // Save investment details to the database
                     saveInvestmentToDatabase(amount, units, currentValue,costperunit);
-                    savetotransactions( amount, units,selectedFund.getSchemeName(),"BUY");
+                    savetotransactions( amount, units,selectedFund.getSchemeName(),"Buy");
                     // Show investment information
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Investment Successful");
