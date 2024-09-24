@@ -30,7 +30,7 @@
     <TextField fx:id="unitsToSellField" promptText="Enter units to sell..." style="-fx-font-size: 14px;" />
 
     <!-- Sell Button -->
-    <Button onAction="#handleSellAction" prefHeight="34.0" prefWidth="87.0" style="-fx-font-size: 14px;" text="Sell" />
+    <Button onAction="#handleSellAction" prefHeight="34.0" prefWidth="87.0" style="-fx-font-size: 14px;" styleClass="button2" text="Sell" />
 
     <!-- Status Label -->
     <Label fx:id="statusLabel" style="-fx-text-fill: red; -fx-font-size: 12px;" />

@@ -289,9 +289,9 @@ public class SIPController {
 
     }
     private void storeSIPDetails(MutualFund fund, double sipAmount, double totalUnits, LocalDate startDate, LocalDate endDate, String frequency, String fund_Name) {
-        String URL = "jdbc:mysql://127.0.0.1:3306/javafxapp" ; // Update as necessary
+        String URL = "jdbc:mysql://localhost:3306/javafxapp" ; // Update as necessary
         String USER = "root"; // Your MySQL username
-        String PASSWORD = "Vedant@98"; // Your MySQL password
+        String PASSWORD = "Servesh#21"; // Your MySQL password
         String insertSQL = "INSERT INTO sip (fund_id,sip_amount, total_units, start_date, end_date, frequency,fund_Name) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
