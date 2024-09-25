@@ -13,8 +13,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class SipDataCellController {
 
@@ -110,7 +112,7 @@ public class SipDataCellController {
 
                 // Store transaction and update database
                 deleteFundFromDatabase(amountInvested, remainingUnits, sipData.getSip_id());
-               // saveToTransactions(amountInvested, unitsToSell, sipData.getSipName(), "Sell");
+               storeSaleTransaction(amountInvested, unitsToSell, sipData.getSipName());
 
                 // Success alert
                 showAlert("Success", "Success", "You have successfully sold " + unitsToSell +
@@ -122,8 +124,24 @@ public class SipDataCellController {
                 showAlert("Error", "Invalid Input", "Please enter a valid number for the amount.");
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         });
+    }
+
+    private void storeSaleTransaction(double saleAmount, double unitsSold, String fundName) throws SQLException {
+        String insertSQL = "INSERT INTO transactions (amount, units, type1, transaction_date, fund_name,fund_type) VALUES (?, ?, 'Sell', ?, ?,'SIP')";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
+
+            stmt.setDouble(1, saleAmount);
+            stmt.setDouble(2, unitsSold);
+            stmt.setDate(3, Date.valueOf(LocalDate.now()));
+            stmt.setString(4, fundName);
+
+            stmt.executeUpdate();
+        }
     }
 
     private void reloadSIPManagementScreen() throws IOException {

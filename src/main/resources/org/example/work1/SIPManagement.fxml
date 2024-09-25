@@ -27,15 +27,11 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane layoutX="200.0" prefHeight="600.0" prefWidth="700.0" styleClass="main-content-pane">
+      <Pane layoutX="200.0" prefHeight="600.0" prefWidth="715.0" styleClass="main-content-pane">
          <children>
-            <Button fx:id="btnStartSIP" layoutX="325.0" layoutY="508.0" onAction="#handleStartsipclick" styleClass="button2" text="START NEW SIP" />
+            <Button fx:id="btnStartSIP" layoutX="322.0" layoutY="548.0" onAction="#handleStartsipclick" styleClass="button2" text="START NEW SIP" />
             <Label prefHeight="46.0" prefWidth="700.0" styleClass="login-container2" stylesheets="@style.css" text="                                                                      SIP DATA" />
-            <ScrollPane layoutX="21.0" layoutY="118.0" prefHeight="364.0" prefWidth="664.0">
-               <content>
-                  <ListView fx:id="sipListView" prefHeight="362.0" prefWidth="679.0" />
-               </content>
-            </ScrollPane>
+            <ListView fx:id="sipListView" layoutX="8.0" layoutY="118.0" prefHeight="418.0" prefWidth="708.0" />
             <TextField fx:id="searchField" layoutX="60.0" layoutY="73.0" prefHeight="25.0" prefWidth="295.0" promptText="Search for Sip" />
          </children>
       </Pane>

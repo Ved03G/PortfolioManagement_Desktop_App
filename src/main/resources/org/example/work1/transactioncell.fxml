@@ -1,20 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="619.0" styleClass="cell_container" stylesheets="@transactioncell.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.TransactionCellController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="619.0" styleClass="cell_container" stylesheets="@transactioncell.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.TransactionCellController">
    <children>
       <VBox alignment="CENTER" layoutX="-3.0" layoutY="2.0" prefHeight="75.0" prefWidth="70.0">
          <children>
-            <FontAwesomeIconView fx:id="fwd" fill="#16d900" glyphName="ARROW_RIGHT" selectionFill="#13a600" size="20" styleClass="icon1" translateY="-10.0" wrappingWidth="17.00003719329834" />
-            <FontAwesomeIconView fx:id="bwd" fill="#ef0707" glyphName="ARROW_LEFT" size="20" styleClass="icon2" wrappingWidth="17.300029516220093" />
+            <FontAwesomeIconView fx:id="fwd" glyphName="ARROW_RIGHT" selectionFill="#13a600" size="20" styleClass="icon1" translateY="-10.0" wrappingWidth="17.00003719329834">
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.1469421684741974" green="0.7789473533630371" blue="0.0634697824716568" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill></FontAwesomeIconView>
+            <FontAwesomeIconView fx:id="bwd" glyphName="ARROW_LEFT" size="20" styleClass="icon2" text="" wrappingWidth="17.300029516220093">
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="1.0" green="0.04444444552063942" blue="0.04444444552063942" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill></FontAwesomeIconView>
          </children>
       </VBox>
       <Label fx:id="date_lbl" layoutX="67.0" layoutY="20.0" styleClass="trans_date_lbl" text="Date" />
       <Label fx:id="type_lbl" layoutX="156.0" layoutY="20.0" styleClass="trans_pAddress_lbl" text="sip/MF" />
-      <Label fx:id="name_lbl" layoutX="258.0" layoutY="19.0" prefHeight="20.0" prefWidth="248.0" styleClass="trans_pAddress_lbl" text="name" />
-      <Label fx:id="amount_lbl" layoutX="535.0" layoutY="16.0" prefHeight="42.0" prefWidth="70.0" styleClass="trans_amount_lbl" text="amount" />
+      <Label fx:id="name_lbl" layoutX="254.0" layoutY="19.0" prefHeight="20.0" prefWidth="248.0" styleClass="trans_pAddress_lbl" text="name" />
+      <Label fx:id="amount_lbl" layoutX="518.0" layoutY="16.0" prefHeight="42.0" prefWidth="87.0" styleClass="trans_amount_lbl" text="amount" />
    </children>
 </AnchorPane>

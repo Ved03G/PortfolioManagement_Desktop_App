@@ -201,6 +201,21 @@ public class MutualFundsController {
 
         investmentTable.setItems(filteredData);
     }
+    private void reloadSMFManagementScreen() throws IOException {
+        // Load the FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MutualFunds.fxml"));
+
+        Parent newRoot = loader.load();
+        // Get the current stage
+        Stage currentStage = (Stage)searchSchemeCode.getScene().getWindow();
+        if (currentStage != null) {
+            // Create a new Scene and set it to the current stage
+            currentStage.setScene(new Scene(newRoot));
+            currentStage.show(); // Make sure to show the stage
+        } else {
+            System.out.println("Current stage is null");
+        }
+    }
 
     @FXML
     public void fetchNAVData() {
@@ -231,7 +246,7 @@ public class MutualFundsController {
     }
     // Add selected mutual fund to investment
     @FXML
-    public void addToInvestment() {
+    public void addToInvestment() throws IOException {
         if (selectedFund != null) {
             if (currentNav == 0.0) {
                 // Ensure that NAV is fetched before allowing investment
@@ -286,6 +301,7 @@ public class MutualFundsController {
             alert.setContentText("Please select a mutual fund first.");
             alert.showAndWait();
         }
+        reloadSMFManagementScreen();
     }
     // Function to save investment details to the database
     private void saveInvestmentToDatabase(double amountInvested, double units, double currentValue, double costperunit) {
@@ -379,7 +395,7 @@ public class MutualFundsController {
 
     // Method to handle the selling of a fund
     @FXML
-    public void handleSellFund(ActionEvent event) {
+    public void handleSellFund(ActionEvent event) throws IOException {
         MutualFund2 selectedfund = investmentTable.getSelectionModel().getSelectedItem();
 
         if (selectedfund != null) {
@@ -424,6 +440,7 @@ public class MutualFundsController {
 
 
     }
+        reloadSMFManagementScreen();
     }
 
 

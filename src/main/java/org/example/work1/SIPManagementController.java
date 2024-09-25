@@ -370,17 +370,6 @@ public class SIPManagementController {
         closesipmanagement();
     }
 
-    public void handlesellclick(ActionEvent event) throws IOException {
-        // Load the sellsip.fxml file
-        Parent root = FXMLLoader.load(getClass().getResource("sellsip.fxml"));
-        Stage sellStage = new Stage();
-        sellStage.setTitle("Sell SIP");
-        Scene sellScene = new Scene(root);
-        sellStage.setScene(sellScene);
-        sellStage.show();
-        closesipmanagement();
-    }
-
     private void closesipmanagement() {
         Stage stage = (Stage) sipListView.getScene().getWindow();
         stage.close();

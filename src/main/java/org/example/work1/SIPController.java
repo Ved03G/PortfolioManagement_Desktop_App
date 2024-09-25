@@ -5,18 +5,16 @@ package org.example.work1;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Label;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -151,8 +149,10 @@ public class SIPController {
             return;
         }
 
+        double totalUnits = 0;
+        double sipAmount = 0;
         try {
-            double sipAmount = Double.parseDouble(sipAmountText);
+            sipAmount = Double.parseDouble(sipAmountText);
             String fundId = selectedFund.getsipid();
 
             String fundDataUrl = "https://api.mfapi.in/mf/" + fundId;
@@ -172,7 +172,7 @@ public class SIPController {
             }
 
             double nav = Double.parseDouble(fundWithNav.getNav());
-            double totalUnits = sipAmount / nav;
+            totalUnits = sipAmount / nav;
 
             navLabel.setText(String.format("NAV: %.2f", nav));
             totalUnitsLabel.setText(String.format("Total Units: %.2f", totalUnits));
@@ -180,9 +180,8 @@ public class SIPController {
             MutualFund fund = parseFundDetails(jsonResponse);
             String schemeName = fund.getSchemeName();
 
-            storeSIPDetails(selectedFund ,sipAmount, totalUnits, startDate, endDate, frequency,schemeName);
-            storetransactiondata( sipAmount, totalUnits,schemeName);
-
+            storeSIPDetails(selectedFund, sipAmount, totalUnits, startDate, endDate, frequency, schemeName);
+            storetransactiondata(sipAmount, totalUnits, schemeName);
 
 
         } catch (NumberFormatException e) {
@@ -197,7 +196,6 @@ public class SIPController {
             System.out.println("Error during SIP investment: " + e.getMessage());
             navLabel.setText("Error during SIP investment.");
         }
-        Stage stage = (Stage) navLabel.getScene().getWindow();
 
 
         try {
@@ -205,6 +203,17 @@ public class SIPController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        double finalTotalUnits = totalUnits;
+        double finalSipAmount = sipAmount;
+        Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Buy Data");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Successfully bought " + finalTotalUnits + "units of" + selectedFund.schemeName + "for ₹" + finalSipAmount);
+                    alert.showAndWait();
+                });
+
+
 //        stage.close();
 
     }
@@ -251,6 +260,23 @@ public class SIPController {
         }
         return null;
     }
+
+    public void backtosipManagement(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SIPManagement.fxml"));
+
+        Parent newRoot = loader.load();
+        // Get the current stage
+        Stage currentStage = (Stage) sipAmountField.getScene().getWindow();
+        if (currentStage != null) {
+            // Create a new Scene and set it to the current stage
+            currentStage.setScene(new Scene(newRoot));
+            currentStage.show(); // Make sure to show the stage
+        } else {
+            System.out.println("Current stage is null");
+        }
+
+    }
+
     public class MutualFund {
         private String sipid;
         private String schemeName;
@@ -315,7 +341,7 @@ public class SIPController {
     private void storetransactiondata(double sipAmount,double totalUnits,String schemename) {
         String URL = "jdbc:mysql://127.0.0.1:3306/javafxapp" ; // Update as necessary
         String USER = "root"; // Your MySQL username
-        String PASSWORD = "Vedant@98"; // Your MySQL password
+        String PASSWORD = "Servesh#21"; // Your MySQL password
 
         String insertSQL = "INSERT INTO transactions ( Amount, units, type1, transaction_date, fund_name,fund_type) VALUES ( ?, ?, ?, ?, ?,?)";
 
@@ -337,5 +363,12 @@ public class SIPController {
             e.printStackTrace();
             System.out.println("Error storing SIP data: " + e.getMessage());
         }
+    }
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

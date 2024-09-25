@@ -11,13 +11,13 @@
 .choice-box{
     -fx-effect: dropshadow(three-pass-box, #a5a3a3, 5, 0, 0, 7);
 }
-.button{
+.button1{
     -fx-background-color: #03e403;
     -fx-effect: dropshadow(three-pass-box, #a5a3a3, 5, 0, 0, 7);
     -fx-text-fill: bold;
     -fx-font-family: "Times New Roman";
 }
-.button:hover{
+.button1:hover{
     -fx-background-color: #02a102;
     -fx-text-fill: white;
 }
