@@ -90,12 +90,12 @@
         </HBox>
       <HBox prefHeight="8.0" prefWidth="531.0">
          <children>
-            <Label disable="true" prefHeight="28.0" prefWidth="39.0" text="NAV:">
+            <Label prefHeight="28.0" prefWidth="39.0" text="NAV:" textFill="#fffbfb">
                <HBox.margin>
                   <Insets left="100.0" />
                </HBox.margin>
             </Label>
-            <Label fx:id="navLabel" disable="true" prefHeight="28.0" prefWidth="116.0" text="NAVLABel">
+            <Label fx:id="navLabel" prefHeight="28.0" prefWidth="116.0" style="-fx-background-color: white;" text="NAVLABel" textFill="#fffbfb">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
@@ -104,12 +104,12 @@
       </HBox>
       <HBox prefHeight="28.0" prefWidth="531.0">
          <children>
-            <Label disable="true" prefHeight="28.0" prefWidth="66.0" text="TotalUnits:">
+            <Label prefHeight="28.0" prefWidth="66.0" text="TotalUnits:" textFill="#fffbfb">
                <HBox.margin>
                   <Insets left="100.0" />
                </HBox.margin>
             </Label>
-            <Label fx:id="totalUnitsLabel" disable="true" prefHeight="28.0" prefWidth="116.0" text="NAVLABel">
+            <Label fx:id="totalUnitsLabel" prefHeight="28.0" prefWidth="116.0" text="NAVLABel" textFill="#fffbfb">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
