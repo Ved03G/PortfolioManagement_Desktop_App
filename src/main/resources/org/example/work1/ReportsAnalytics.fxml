@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.ReportsAnalyticsController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.work1.ReportsAnalyticsController">
    <children>
       <Pane prefHeight="600.0" prefWidth="200.0" styleClass="login-container2" stylesheets="@style.css">
          <children>
@@ -28,40 +34,32 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane layoutX="200.0" prefHeight="600.0" prefWidth="700.0" styleClass="main-content-pane" stylesheets="@style.css">
+      <Pane layoutX="186.0" prefHeight="600.0" prefWidth="714.0" styleClass="main-content-pane" stylesheets="@style.css">
          <children>
-            <Label layoutX="20.0" layoutY="14.0" styleClass="header-label" text="Reports &amp; Analytics" />
-
-            <!-- Portfolio Summary Section -->
-            <Label layoutX="20.0" layoutY="50.0" styleClass="summary-label" text="Total Portfolio Value: $150,000" />
-            <Label layoutX="20.0" layoutY="80.0" styleClass="summary-label" text="Total Returns: $25,000" />
-            <Label layoutX="20.0" layoutY="110.0" styleClass="summary-label" text="Net Profit: $10,000" />
 
             <!-- Pie Chart for Investment Allocation -->
-            <Label layoutX="20.0" layoutY="150.0" styleClass="section-label" text="Investment Allocation:" />
-            <PieChart fx:id="portfolioPieChart" layoutX="20.0" layoutY="180.0" prefHeight="200.0" prefWidth="300.0" />
+            <Label layoutX="9.0" layoutY="17.0" styleClass="section-label" text="Investment Allocation:" />
+            <PieChart fx:id="portfolioPieChart" layoutX="14.0" layoutY="80.0" prefHeight="265.0" prefWidth="251.0" />
 
             <!-- Line Chart for Investment Growth Over Time -->
-            <Label layoutX="350.0" layoutY="150.0" styleClass="section-label" text="Investment Growth Over Time:" />
-            <LineChart fx:id="lineChartGrowth" layoutX="350.0" layoutY="180.0" prefHeight="200.0" prefWidth="300.0">
+            <Label layoutX="347.0" layoutY="17.0" styleClass="section-label" text="Investment Growth Over Time(SIP):" />
+            <LineChart fx:id="lineChart" layoutX="264.0" layoutY="80.0" prefHeight="303.0" prefWidth="444.0">
                <xAxis>
-                  <CategoryAxis label="Months" />
+                  <CategoryAxis label="xAxis" />
                </xAxis>
                <yAxis>
-                  <NumberAxis label="Portfolio Value ($)" />
+                  <NumberAxis label="yAxis" />
                </yAxis>
             </LineChart>
-
-            <!-- Bar Chart for Monthly Returns -->
-            <Label layoutX="20.0" layoutY="400.0" styleClass="section-label" text="Monthly Returns:" />
-            <BarChart fx:id="barChartReturns" layoutX="20.0" layoutY="430.0" prefHeight="150.0" prefWidth="630.0">
-               <xAxis>
-                  <CategoryAxis label="Month" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis label="Returns ($)" />
-               </yAxis>
-            </BarChart>
+            <LineChart fx:id="mutualFundLineChart" layoutX="284.0" layoutY="368.0" prefHeight="236.0" prefWidth="393.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </LineChart>
+            <Label layoutX="6.0" layoutY="337.0" styleClass="section-label" text="Investment Growth Over Time(MF):" />
          </children>
       </Pane>
    </children>
