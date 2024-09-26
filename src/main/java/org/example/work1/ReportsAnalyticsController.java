@@ -95,7 +95,7 @@ public class ReportsAnalyticsController {
             statement = connection.createStatement();
 
             // Execute the query to get the type data
-            String query = "SELECT  SUM(amount_invested) AS Count FROM portfolio group by type";
+            String query = "SELECT type, SUM(amount_invested) AS Count FROM portfolio group by type";
             ResultSet resultSet = statement.executeQuery(query);
 
             // Populate the PieChart with data from the result set
